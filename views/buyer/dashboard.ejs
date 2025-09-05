@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyer Dashboard - PubliShelf</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="fixed w-full bg-white shadow-sm z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/buyer/dashboard" class="flex items-center">
+                        <span
+                            class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 text-transparent bg-clip-text">PubliShelf</span>
+                    </a>
+                </div>
+                <div class="flex items-center md:space-x-8 relative">
+                    <div class="relative">
+                        <form action="/buyer/search" method="GET">
+                          <input type="text" name="q" placeholder="Search books..." class="w-[25vw] px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-purple-600" />
+                          <button type="submit" class="absolute right-3 top-2.5 text-gray-400">
+                            <i class="fas fa-search"></i>
+                          </button>
+                        </form>
+                      </div>
+                    <a href="/buyer/cart/#wishlist-section" class="text-gray-700 hover:text-purple-600 hidden md:block">
+                        <i class="far fa-heart"></i>
+                    </a>
+                    <a href="/buyer/cart" class="text-gray-700 hover:text-purple-600 hidden md:block">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+
+                    <button onclick="window.location.href='/buyer/auction-page'"
+                        class="bg-gradient-to-r hover:bg-gradient-to-l from-purple-600 to-indigo-600 text-white px-4 py-2 rounded-lg hover:-translate-y-[2px] transition-all duration-300  hidden md:block">Enter
+                        Auction</button>
+
+                    <div class="relative group">
+                        <button class="scale-0 md:scale-100 flex items-center space-x-2"
+                            onclick="window.location.href='/buyer/profile'">
+                            <img src="https://img.icons8.com/?size=100&id=zxB19VPoVLjK&format=png&color=000000"
+                                alt="Profile" class="w-5 h-5 rounded-full">
+                            <span class="text-gray-700">
+                                <%= buyerName %>
+                            </span>
+                        </button>
+                        <div
+                            class="absolute top-full right-1 w-48 bg-white shadow-lg rounded-lg py-2 hidden group-hover:block">
+                            <a href="/buyer/profile" class="<%= styles.categoryBtnStyle %>">Your Profile</a>
+                            <a href="/logout" class="<%= styles.categoryBtnStyle %>">Logout</a>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <button class="md:hidden flex items-center space-x-2">
+                            <img src="https://img.icons8.com/?size=100&id=zxB19VPoVLjK&format=png&color=000000"
+                                alt="Profile" class="w-5 h-5 rounded-full"></button>
+                        <div
+                            class="absolute top-full right-1 w-48 bg-white shadow-lg rounded-lg py-2 hidden group-hover:block">
+                            <a href="/buyer/profile" class="<%= styles.categoryBtnStyle %>">Your Profile</a>
+                            <a href="/buyer/auction-page" class="<%= styles.categoryBtnStyle %>">Enter Auction</a>
+                            <a href="/buyer/cart/#wishlist-section" class="<%= styles.categoryBtnStyle %>">WishList</a>
+                            <a href="/buyer/cart" class="<%= styles.categoryBtnStyle %>">Cart</a>
+                            <a href="/logout" class="<%= styles.categoryBtnStyle %>">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <!-- Featured Books Sections -->
+    <section class="py-12 pt-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Newly Added Books</h2>
+            <div class="book-carousel" id="topRatedCarousel">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <% newlyBooks.forEach(book=> { %>
+                        <div class="<%= styles.bookCardStyle %>" onclick="window.location.href='/buyer/product-detail/<%= book.id %>'">
+                            <img src="<%= book.image %>" alt="<%= book.title %>" class="w-full h-64 object-cover">
+                            <div class="p-3">
+                                <h3 class="text-lg font-semibold mb-1 truncate">
+                                    <%= book.title %>
+                                </h3>
+                                <p class="text-gray-600 text-sm mb-2">by <%= book.author %>
+                                </p>
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        
+                                    </div>
+                                    <span class="font-bold text-purple-600 text-sm">
+                                        ₹<%= book.price %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Most Sold Books Section -->
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Most Sold Books</h2>
+            <div class="book-carousel" id="mostSoldCarousel">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <% mostSoldBooks.forEach(book=> { %>
+                        <div class="<%= styles.bookCardStyle %>" onclick="window.location.href='/buyer/product-detail/<%= book._id %>'">
+                            <img src="<%= book.image %>" alt="<%= book.title %>" class="w-full h-64 object-cover">
+                            <div class="p-3">
+                                <h3 class="text-lg font-semibold mb-1 truncate">
+                                    <%= book.title %>
+                                </h3>
+                                <p class="text-gray-600 text-sm mb-2">by <%= book.author %>
+                                </p>
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        <span class="text-purple-600 text-sm">
+                                            Total Sold: <%= book.totalSold %>
+                                        </span>
+                                    </div>
+                                    <span class="font-bold text-purple-600 text-sm">
+                                        ₹<%= book.price %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Books Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Trending Now</h2>
+            <div class="book-carousel" id="trendingCarousel">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <% trendingBooks.forEach((book, idx)=> { %>
+                        <div class="<%= styles.bookCardStyle %>" onclick="window.location.href='/buyer/product-detail/<%= book._id %>'">
+                            <div class="relative">
+                                <img src="<%= book.image %>" alt="<%= book.title %>" class="w-full h-64 object-cover">
+                                <div
+                                    class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs">
+                                    #<%= idx %>
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <h3 class="text-lg font-semibold mb-1 truncate">
+                                    <%= book.title %>
+                                </h3>
+                                <p class="text-gray-600 text-sm mb-2">by <%= book.author %>
+                                </p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-purple-600 text-sm">Trending</span>
+                                    <span class="font-bold text-purple-600 text-sm">
+                                        ₹<%= book.price %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="/js/script.js"></script>
+</body>
+
+</html>

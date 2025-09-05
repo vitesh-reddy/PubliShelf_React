@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details - PubliShelf</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="fixed w-full bg-white shadow-sm z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/buyer/dashboard" class="flex items-center">
+                        <span
+                            class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 text-transparent bg-clip-text">PubliShelf</span>
+                    </a>
+                </div>
+                <div class="flex items-center md:space-x-8 relative">
+                    <a href="/buyer/cart/#wishlist-section" class="text-gray-700 hover:text-purple-600 hidden md:block">
+                        <i class="far fa-heart"></i>
+                    </a>
+                    <a href="/buyer/cart" class="text-gray-700 hover:text-purple-600 hidden md:block">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+                    <div class="relative group">
+                        <button class="scale-0 md:scale-100 flex items-center space-x-2"
+                            onclick="window.location.href='/buyer/profile'">
+                            <img src="https://img.icons8.com/?size=100&id=zxB19VPoVLjK&format=png&color=000000"
+                                alt="Profile" class="w-5 h-5 rounded-full">
+                            <span class="text-gray-700">
+                                <%= buyerName %>
+                            </span>
+                        </button>
+                        <div
+                            class="absolute top-full right-1 w-48 bg-white shadow-lg rounded-lg py-2 hidden group-hover:block">
+                            <a href="/buyer/profile" class="<%= styles.categoryBtnStyle %>">Your Profile</a>
+                            <a href="/logout" class="<%= styles.categoryBtnStyle %>">Logout</a>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <button class="md:hidden flex items-center space-x-2">
+                            <img src="https://img.icons8.com/?size=100&id=zxB19VPoVLjK&format=png&color=000000"
+                                alt="Profile" class="w-5 h-5 rounded-full"></button>
+                        <div
+                            class="absolute top-full right-1 w-48 bg-white shadow-lg rounded-lg py-2 hidden group-hover:block">
+                            <a href="/buyer/profile" class="<%= styles.categoryBtnStyle %>">Your Profile</a>
+                            <a href="/buyer/cart/#wishlist-section" class="<%= styles.categoryBtnStyle %>">WishList</a>
+                            <a href="/buyer/cart" class="<%= styles.categoryBtnStyle %>">Cart</a>
+                            <a href="/logout" class="<%= styles.categoryBtnStyle %>">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Breadcrumb -->
+            <nav class="flex mb-8" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="/buyer/dashboard" class="text-gray-700 hover:text-purple-600">
+                            <i class="fas fa-home mr-2"></i>
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
+                            <span class="text-gray-500">
+                                <%= book.title %>
+                            </span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+
+            <!-- Product Details -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
+                    <!-- Image Section -->
+                    <div class="space-y-4">
+                        <div class="aspect-w-3 aspect-h-4 rounded-lg overflow-hidden">
+                            <img src="<%= book.image %>" alt="The Midnight Library"
+                                class="w-[500px] h-[600px] object-cover transform transition-transform duration-500 hover:scale-[1.01]">
+                        </div>
+                        <!--  -->
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="space-y-6">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-900">
+                                <%= book.title %>
+                            </h1>
+                            <p class="text-lg text-gray-600 mt-2">
+                                <%= book.author %>
+                            </p>
+                            <p class="text-gray-600">Genre : <%= book.genre %>
+                            </p>
+                        </div>
+
+                        <div class="flex items-center">
+                            <span class="ml-2 text-gray-600">
+                                <%= book.rating %> (<%= book.reviews.length %>)
+                            </span>
+                            <span class="text-green-600"> In Stock (<%=book.quantity%>)</span>
+                            <br>
+                        </div>
+
+                        <div class="border-t border-b py-4">
+                            <div class="flex items-baseline">
+                                <span class="text-4xl font-bold text-gray-900">₹<%= book.price %></span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center border rounded-lg">
+
+                                </div>
+                                <button onclick="window.location.href = '/buyer/cart';"
+                                    class="flex-1 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                                    Buy Now
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="relative grid grid-cols-2 gap-4">
+                                    <% if (isInCart) { %>
+                                        <!-- If the book is already in the cart -->
+                                        <button onclick="window.location.href='/buyer/cart'"
+                                            class="absolute w-full flex items-center justify-center space-x-2 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                                            <i class="fas fa-shopping-cart"></i>
+                                            <span>Go to Cart</span>
+                                        </button>
+                                        <% } else { %>
+                                            <!-- If the book is not in the cart -->
+                                            <button id="addToCartBtn"
+                                                class="absolute w-full flex items-center justify-center space-x-2 border border-purple-600 text-purple-600 px-6 py-3 rounded-lg hover:bg-purple-50 transition-colors">
+                                                <i class="fas fa-shopping-cart"></i>
+                                                <span>Add to Cart</span>
+                                            </button>
+                                            <% } %>
+                                </div>
+                                <button id="addToWishlistBtn" data-book-id="<%= book._id %>"
+                                    class="flex items-center justify-center space-x-2 border border-purple-600 text-purple-600 hover:text-red-500 px-6 py-3 rounded-lg transition-colors">
+                                    <i class="far fa-heart"></i>
+                                    <span>Add to Wishlist</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold">Description</h3>
+                            <p class="text-gray-600">
+                                <%= book.description %>
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <!-- Reviews Section -->
+            <div class="mt-8">
+                <h3 class="text-2xl font-bold mb-6">Customer Reviews</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <% if (book.reviews.length> 0) { %>
+                        <% book.reviews.forEach(review=> { %>
+                            <div class="bg-white p-6 rounded-xl shadow-lg">
+                                <div class="flex items-start space-x-4">
+                                    <!-- Display buyer's avatar -->
+                                    <img src="https://ui-avatars.com/api/?name=<%= review.buyer.firstname %>+<%= review.buyer.lastname %>"
+                                        alt="<%= review.buyer.firstname %>" class="w-12 h-12 rounded-full">
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between">
+                                            <h4 class="font-semibold">
+                                                <%= review.buyer.firstname %>
+                                                    <%= review.buyer.lastname %>
+                                            </h4>
+                                            <span class="text-gray-500">
+                                                <%= new Date(review.createdAt).toLocaleDateString() %>
+                                            </span>
+                                        </div>
+                                        <div class="flex text-yellow-400 my-1">
+                                            <% for (let i=0; i < review.rating; i++) { %>
+                                                <i class="fas fa-star"></i>
+                                                <% } %>
+                                                    <% for (let i=review.rating; i < 5; i++) { %>
+                                                        <i class="far fa-star"></i>
+                                                        <% } %>
+                                        </div>
+                                        <p class="text-gray-600">
+                                            <%= review.comment %>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }); %>
+                                <% } else { %>
+                                    <p class="text-gray-600">No reviews yet. Be the first to review this book!</p>
+                                    <% } %>
+                </div>
+            </div>
+
+            <!-- Similar Books -->
+            <div class="mt-12">
+                <h3 class="text-2xl font-bold mb-6">You May Also Like</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="book-card">
+                        <img src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=300"
+                            alt="Book 1" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-semibold">Atomic Habits</h4>
+                            <p class="text-gray-600 text-sm">James Clear</p>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="font-bold text-purple-600">$24.99</span>
+                                <button class="text-gray-400 hover:text-purple-600">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <img src="https://images.unsplash.com/photo-1531988042231-d39a9cc12a9a?auto=format&fit=crop&q=80&w=300"
+                            alt="Book 2" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-semibold">Project Hail Mary</h4>
+                            <p class="text-gray-600 text-sm">Andy Weir</p>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="font-bold text-purple-600">$21.99</span>
+                                <button class="text-gray-400 hover:text-purple-600">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=300"
+                            alt="Book 3" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-semibold">Tomorrow, and Tomorrow, and Tomorrow</h4>
+                            <p class="text-gray-600 text-sm">Gabrielle Zevin</p>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="font-bold text-purple-600">$18.99</span>
+                                <button class="text-gray-400 hover:text-purple-600">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <img src="https://images.unsplash.com/photo-1543497415-75c0a27177bf?auto=format&fit=crop&q=80&w=300"
+                            alt="Book 4" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-semibold">The Silent Patient</h4>
+                            <p class="text-gray-600 text-sm">Alex Michaelides</p>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="font-bold text-purple-600">$16.99</span>
+                                <button class="text-gray-400 hover:text-purple-600">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+    <script>
+        const addToCartBtn = document.getElementById('addToCartBtn');
+        if (addToCartBtn) {
+            addToCartBtn.addEventListener('click', async () => {
+                const bookId = "<%= book._id %>"; // Pass the book ID dynamically
+                const quantity = 1; // Default quantity for now
+
+                try {
+                    const response = await fetch('/buyer/cart/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ bookId, quantity }),
+                    });
+
+                    if (response.ok) {
+                        alert('Book added to cart successfully!');
+                        location.reload(); // Reload the page to update the button
+                    } else {
+                        const error = await response.json();
+                        alert(`Failed to add to cart: ${error.message}`);
+                    }
+                } catch (err) {
+                    console.error('Error adding to cart:', err);
+                    alert('An error occurred while adding the book to the cart.');
+                }
+            });
+        }
+        const addToWishlistBtn = document.getElementById('addToWishlistBtn');
+        addToWishlistBtn.addEventListener('click', async () => {
+            const bookId = addToWishlistBtn.getAttribute('data-book-id');
+
+            try {
+                const response = await fetch('/buyer/wishlist/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ bookId }),
+                });
+
+                if (response.ok) {
+                    alert('Book added to wishlist successfully!');
+                    addToWishlistBtn.querySelector('i').classList.replace('far', 'fas');
+                    addToWishlistBtn.classList.add('text-red-500');
+                } else {
+                    const error = await response.json();
+                    alert(`Failed to add to wishlist: ${error.message}`);
+                }
+            } catch (err) {
+                console.error('Error adding to wishlist:', err);
+                alert('An error occurred while adding the book to the wishlist.');
+            }
+        });        
+    </script>
+</body>
+
+</html>
