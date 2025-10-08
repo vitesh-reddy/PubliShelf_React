@@ -127,5 +127,4 @@ const PublisherSignup = () => {
     </div>
   );
 };
-
 export default PublisherSignup;
