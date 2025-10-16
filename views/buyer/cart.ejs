@@ -2,22 +2,20 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cart & Wishlist - PubliShelf</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="/css/styles.css">
 
     <style>
-        /* Hide number input spinners (Chrome, Safari, Edge) */
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
             margin: 0;
+            -webkit-appearance: none;
         }
 
-        /* Hide number input spinners (Firefox) */
         input[type="number"] {
             -moz-appearance: textfield;
         }
@@ -25,29 +23,27 @@
 </head>
 
 <body class="bg-gray-50">
-    <!-- Navbar -->
     <nav class="fixed w-full bg-white shadow-sm z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <a href="/buyer/dashboard" class="flex items-center">
-                        <span
-                            class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 text-transparent bg-clip-text">PubliShelf</span>
+                        <span class="font-bold text-2xl bg-gradient-to-r from-purple-600 to-indigo-600 text-transparent bg-clip-text">PubliShelf</span>
                     </a>
                 </div>
-                <div class="flex items-center md:space-x-8 relative">
-                    <a href="/buyer/cart/#wishlist-section" class="text-gray-700 hover:text-purple-600 hidden md:block">
+                <div class="relative flex items-center md:space-x-8">
+                    <a href="/buyer/cart/#wishlist-section" class="hidden text-gray-700 hover:text-purple-600 md:block">
                         <i class="far fa-heart"></i>
                     </a>
-                    <a href="/buyer/cart" class="text-gray-700 hover:text-purple-600 hidden md:block">
+                    <a href="/buyer/cart" class="hidden text-gray-700 hover:text-purple-600 md:block">
                         <i class="fas fa-shopping-cart"></i>
                     </a>
 
                     <button onclick="window.location.href='/logout'"
-                        class="bg-gradient-to-r hover:bg-gradient-to-l from-purple-600 to-indigo-600 text-white px-4 py-2 rounded-lg hover:-translate-y-[2px] transition-all duration-300  hidden md:block">logout</button>
+                        class="hidden px-4 py-2 text-white transition-all duration-300 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:bg-gradient-to-l hover:-translate-y-[2px] md:block">logout</button>
 
                     <div class="relative">
-                        <button class="scale-0 md:scale-100 flex items-center space-x-2"
+                        <button class="flex items-center space-x-2 scale-0 md:scale-100"
                             onclick="window.location.href='/buyer/profile'">
                             <img src="https://img.icons8.com/?size=100&id=zxB19VPoVLjK&format=png&color=000000"
                                 alt="Profile" class="w-5 h-5 rounded-full">
@@ -57,11 +53,11 @@
                         </button>
                     </div>
                     <div class="relative group">
-                        <button class="md:hidden flex items-center space-x-2">
+                        <button class="flex items-center space-x-2 md:hidden">
                             <img src="https://img.icons8.com/?size=100&id=zxB19VPoVLjK&format=png&color=000000"
                                 alt="Profile" class="w-5 h-5 rounded-full"></button>
                         <div
-                            class="absolute top-full right-1 w-48 bg-white shadow-lg rounded-lg py-2 hidden group-hover:block">
+                            class="absolute top-full right-1 hidden w-48 py-2 bg-white rounded-lg shadow-lg group-hover:block">
                             <a href="/buyer/profile" class="<%= styles.categoryBtnStyle %>">Your Profile</a>
                             <a href="/buyer/cart/#wishlist-section" class="<%= styles.categoryBtnStyle %>">WishList</a>
                             <a href="/buyer/cart" class="<%= styles.categoryBtnStyle %>">Cart</a>
@@ -73,161 +69,159 @@
         </div>
     </nav>
 
-
-    <!-- Main Content -->
     <div class="pt-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="flex flex-col lg:flex-row gap-8">
-                <!-- Cart Section -->
+        <div class="max-w-7xl px-4 py-8 mx-auto sm:px-6 lg:px-8">
+            <div class="flex flex-col gap-8 lg:flex-row">
                 <div class="lg:w-2/3">
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="overflow-hidden bg-white rounded-xl shadow-lg">
                         <div class="p-6 border-b">
                             <h2 class="text-2xl font-bold text-gray-900">Shopping Cart</h2>
-                            <p class="text-gray-500 mt-1">You have <%= cart.length %> items in your cart</p>
+                            <p id="cart-count-text" class="mt-1 text-gray-500">You have <%= cart.length %> items in your cart</p>
                         </div>
 
-                        <div class="divide-y">
+                        <div id="cart-items" class="divide-y">
                             <% cart.forEach(item=> { %>
-                                        <div class="p-6 flex items-center space-x-4">
-                                            <img src="<%= item.book.image %>" alt="<%= item.book.title %>"
-                                                class="w-24 h-32 object-cover rounded-lg">
-                                            <div class="flex-1">
-                                                <h3 class="text-lg font-semibold text-gray-900">
-                                                    <%= item.book.title %>
-                                                </h3>
-                                                <p class="text-gray-600">by <%= item.book.author %> </p>
-                                                </p>
-                                                <div class="flex items-center mt-2">
-                                                    <div class="flex text-yellow-400">
-                                                        <% for(let i=0; i < Math.floor(item.book.rating); i++) { %>
-                                                            <i class="fas fa-star"></i>
-                                                            <% } %>
-                                                                <% if(item.book.rating % 1 !==0) { %>
-                                                                    <i class="fas fa-star-half-alt"></i>
-                                                                    <% } %>
-                                                    </div>
-                                                    <span class="ml-2 text-gray-600">
-                                                        <%= item.book.rating %>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center space-x-4">
-                                                <div class="flex items-center border rounded-lg">
-                                                    <button
-                                                        class="decrement-btn px-3 py-1 text-gray-600 hover:text-purple-600"
-                                                        data-book-id="<%= item.book._id %>">
-                                                        <i class="fas fa-minus"></i>
-                                                    </button>
-
-                                                    <input type="number" value="<%= item.quantity %>" min="1"
-                                                        max=<%= item.book.quantity %>
-                                                        class="quantity-input w-12 text-center border-x focus:outline-none focus:ring-0"
-                                                        data-book-id="<%= item.book._id %>">
-                                                    <button
-                                                        class="increment-btn px-3 py-1 text-gray-600 hover:text-purple-600"
-                                                        data-book-id="<%= item.book._id %>">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
-
-                                                </div>
-
-                                                <div class="text-right">
-                                                    <p class="text-lg font-bold text-gray-900">
-                                                        ₹<%= item.book.price %>
-                                                    </p>
-                                                    <button
-                                                        class="text-red-500 hover:text-red-600 text-sm remove-from-cart-btn"
-                                                        data-book-id="<%= item.book._id %>"> Remove </button>
-                                                </div>
-                                            </div>
+                            <div class="flex items-center p-6 space-x-4 cart-item" data-book-id="<%= item.book._id %>">
+                                <img src="<%= item.book.image %>" alt="<%= item.book.title %>"
+                                    class="object-cover w-24 h-32 rounded-lg">
+                                <div class="flex-1">
+                                    <h3 class="text-lg font-semibold text-gray-900"><a href="/buyer/product/<%= item.book._id %>"><%= item.book.title %></a></h3>
+                                    <p class="text-gray-600">by <%= item.book.author %></p>
+                                    <div class="flex items-center mt-2">
+                                        <div class="flex text-yellow-400">
+                                            <% for(let i=0; i < Math.floor(item.book.rating || 0); i++) { %>
+                                            <i class="fas fa-star"></i>
+                                            <% } %>
+                                            <% if((item.book.rating || 0) % 1 !==0) { %>
+                                            <i class="fas fa-star-half-alt"></i>
+                                            <% } %>
                                         </div>
-                                        <% }); %>
+                                        <span class="ml-2 text-gray-600"><%= item.book.rating || 0 %></span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex items-center border rounded-lg">
+                                        <button
+                                            type="button"
+                                            class="px-3 py-1 text-gray-600 hover:text-purple-600 decrement-btn"
+                                            data-book-id="<%= item.book._id %>">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+
+                                        <input type="number" value="<%= item.quantity %>" min="1"
+                                            max="<%= item.book.quantity %>"
+                                            class="w-12 text-center border-x focus:outline-none focus:ring-0 quantity-input"
+                                            data-book-id="<%= item.book._id %>">
+
+                                        <button
+                                            type="button"
+                                            class="px-3 py-1 text-gray-600 hover:text-purple-600 increment-btn"
+                                            data-book-id="<%= item.book._id %>">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+
+                                    <div class="text-right">
+                                        <p class="text-lg font-bold text-gray-900 unit-price" data-unit-price="<%= item.book.price %>">
+                                            ₹<%= item.book.price %>
+                                        </p>
+                                        <p class="text-sm text-gray-600">Item total: ₹<span class="line-total"><%= (item.book.price * item.quantity).toFixed(2) %></span></p>
+                                        <button
+                                            type="button"
+                                            class="text-sm text-red-500 hover:text-red-600 remove-from-cart-btn"
+                                            data-book-id="<%= item.book._id %>">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }); %>
                         </div>
                     </div>
 
-                    <!-- Wishlist Section -->
-                    <div id="wishlist-section" class="mt-8 bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div id="wishlist-section" class="mt-8 overflow-hidden bg-white rounded-xl shadow-lg">
                         <div class="p-6 border-b">
                             <h2 class="text-2xl font-bold text-gray-900">Wishlist</h2>
-                            <p class="text-gray-500 mt-1">You have <%= wishlist.length %> items in your wishlist</p>
+                            <p class="mt-1 text-gray-500">You have <%= wishlist.length %> items in your wishlist</p>
                         </div>
 
                         <div class="divide-y">
                             <% wishlist.forEach(item=> { %>
-
-                                <div class="p-6 flex items-center space-x-4">
-                                    <img src="<%= item.image %>" alt="<%= item.title %>"
-                                        class="w-24 h-32 object-cover rounded-lg">
-                                    <div class="flex-1">
-                                        <h3 class="text-lg font-semibold text-gray-900">
-                                            <%= item.title %>
-                                        </h3>
-                                        <p class="text-gray-600">by <%= item.author %>
-                                        </p>
-                                        <div class="flex items-center mt-2">
-                                            <div class="flex text-yellow-400">
-                                                <% for(let i=0; i < Math.floor(item.rating); i++) { %>
-                                                    <i class="fas fa-star"></i>
-                                                    <% } %>
-                                                        <% if(item.rating % 1 !==0) { %>
-                                                            <i class="fas fa-star-half-alt"></i>
-                                                            <% } %>
-                                            </div>
-                                            <span class="ml-2 text-gray-600">
-                                                <%= item.rating %>
-                                            </span>
+                            <div class="flex items-center p-6 space-x-4 wishlist-item" data-book-id="<%= item._id %>">
+                                <img src="<%= item.image %>" alt="<%= item.title %>"
+                                    class="object-cover w-24 h-32 rounded-lg">
+                                <div class="flex-1">
+                                    <h3 class="text-lg font-semibold text-gray-900">
+                                        <%= item.title %>
+                                    </h3>
+                                    <p class="text-gray-600">by <%= item.author %></p>
+                                    <div class="flex items-center mt-2">
+                                        <div class="flex text-yellow-400">
+                                            <% for(let i=0; i < Math.floor(item.rating || 0); i++) { %>
+                                            <i class="fas fa-star"></i>
+                                            <% } %>
+                                            <% if((item.rating || 0) % 1 !==0) { %>
+                                            <i class="fas fa-star-half-alt"></i>
+                                            <% } %>
                                         </div>
-                                    </div>
-                                    <div class="text-right space-y-2">
-                                        <p class="text-lg font-bold text-gray-900">
-                                            ₹<%= item.price %>
-                                        </p>
-                                        <button
-                                            class="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-                                            Add to Cart
-                                        </button>
-                                        <button class="text-red-500 hover:text-red-600 text-sm remove-from-wishlist-btn"
-                                            data-book-id="<%= item._id %>">
-                                            Remove
-                                        </button>
+                                        <span class="ml-2 text-gray-600"><%= item.rating || 0 %></span>
                                     </div>
                                 </div>
-                                <% }); %>
+                                <div class="space-y-2 text-right">
+                                    <p class="text-lg font-bold text-gray-900">₹<%= item.price %></p>
+                                    <button
+                                        type="button"
+                                        class="w-full px-4 py-2 text-white transition-colors rounded-lg bg-purple-600 hover:bg-purple-700 add-to-cart-btn"
+                                        data-book-id="<%= item._id %>"
+                                        data-title="<%= item.title.replace(/"/g,'&quot;') %>"
+                                        data-author="<%= item.author.replace(/"/g,'&quot;') %>"
+                                        data-price="<%= item.price %>"
+                                        data-image="<%= item.image %>"
+                                        data-rating="<%= item.rating || 0 %>">
+                                        Add to Cart
+                                    </button>
+                                    <button
+                                        class="text-sm text-red-500 hover:text-red-600 remove-from-wishlist-btn"
+                                        data-book-id="<%= item._id %>">Remove</button>
+                                </div>
+                            </div>
+                            <% }); %>
                         </div>
                     </div>
                 </div>
 
-                <!-- Order Summary -->
                 <div class="lg:w-1/3">
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden sticky top-24">
+                    <div class="sticky top-24 overflow-hidden bg-white rounded-xl shadow-lg">
                         <div class="p-6 border-b">
                             <h2 class="text-xl font-bold text-gray-900">Order Summary</h2>
                         </div>
-                        <div class="p-6 space-y-4">
+                        <div id="order-summary" class="p-6 space-y-4"
+                            data-tax-rate="<%= subtotal > 0 ? (tax / subtotal) : 0 %>"
+                            data-shipping-charge="35"
+                            data-shipping-threshold="35">
                             <div class="flex justify-between text-gray-600">
-                                <span>Subtotal (<%= cart.length %> items)</span>
-                                <span>₹<%= subtotal.toFixed(2) %></span>
+                                <span>Subtotal (<span id="summary-count"><%= cart.length %></span> items)</span>
+                                <span id="summary-subtotal">₹<%= subtotal.toFixed(2) %></span>
                             </div>
                             <div class="flex justify-between text-gray-600">
                                 <span>Shipping</span>
-                                <span>₹<%= shipping.toFixed(2) %></span>
+                                <span id="summary-shipping">₹<%= shipping.toFixed(2) %></span>
                             </div>
                             <div class="flex justify-between text-gray-600">
                                 <span>Tax</span>
-                                <span>₹<%= tax.toFixed(2) %></span>
+                                <span id="summary-tax">₹<%= tax.toFixed(2) %></span>
                             </div>
                             <div class="pt-4 border-t">
                                 <div class="flex justify-between text-lg font-bold">
                                     <span>Total</span>
-                                    <span>₹<%= total.toFixed(2) %></span>
+                                    <span id="summary-total">₹<%= total.toFixed(2) %></span>
                                 </div>
                             </div>
-                            <button id="proceedToCheckoutBtn" onclick="window.location.href='/buyer/checkout'"
-                                class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                            <button id="proceedToCheckoutBtn"
+                                onclick="window.location.href='/buyer/checkout'"
+                                class="w-full py-3 text-white transition-colors rounded-lg bg-purple-600 hover:bg-purple-700">
                                 Proceed to Checkout
                             </button>
 
-                            <div class="text-center text-sm text-gray-500">
+                            <div class="text-sm text-center text-gray-500">
                                 <p>Free shipping on orders over ₹35</p>
                                 <p class="mt-1">Expected delivery: 3-5 business days</p>
                             </div>
@@ -236,125 +230,241 @@
                 </div>
             </div>
         </div>
+
     </div>
+
     <script src="/js/script.js"></script>
     <script>
-        const updateCheckoutButton = () => {
-            const proceedToCheckoutBtn = document.getElementById('proceedToCheckoutBtn');
-            const cartItems = document.querySelectorAll('.remove-from-cart-btn'); // Count cart items dynamically
-            if (cartItems.length > 0) {
-                proceedToCheckoutBtn.disabled = false;
-                proceedToCheckoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            } else {
-                proceedToCheckoutBtn.disabled = true;
-                proceedToCheckoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        const updateQuantityOnServer = async (bookId, quantity) => {
+            try {
+                const res = await fetch('/buyer/cart/update-quantity', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ bookId, quantity })
+                });
+                return res.ok;
+            } catch (err) {
+                console.error(err);
+                return false;
             }
-        }
+        };
 
-        // Call the function initially to set the correct state
-        updateCheckoutButton();
-        document.querySelectorAll('.remove-from-cart-btn').forEach(button => {
-            button.addEventListener('click', async (event) => {
-                const bookId = event.target.getAttribute('data-book-id'); // Get the book ID from the button
+        const removeFromCartOnServer = async (bookId) => {
+            try {
+                const res = await fetch('/buyer/cart/remove', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ bookId })
+                });
+                return res.ok;
+            } catch (err) {
+                console.error(err);
+                return false;
+            }
+        };
 
-                try {
-                    const response = await fetch('/buyer/cart/remove', {
-                        method: 'DELETE', // Use DELETE method for better semantics
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ bookId }), // Send the book ID in the request body
-                    });
+        const addToCartOnServer = async (bookId, quantity = 1) => {
+            try {
+                const res = await fetch('/buyer/cart/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ bookId, quantity })
+                });
+                return res.ok;
+            } catch (err) {
+                console.error(err);
+                return false;
+            }
+        };
 
-                    if (response.ok) {
-                        alert('Item removed from cart successfully!');
-                        updateCheckoutButton(); // Update the checkout button state
-                        location.reload(); // Reload the page to update the cart
-                    } else {
-                        const error = await response.json();
-                        alert(`Failed to remove item: ${error.message}`);
-                    }
-                } catch (err) {
-                    console.error('Error removing item from cart:', err);
-                    alert('An error occurred while removing the item from the cart.');
-                }
+        const recalcTotals = () => {
+            const items = document.querySelectorAll('.cart-item');
+            let subtotal = 0;
+            items.forEach(item => {
+                const qtyInput = item.querySelector('.quantity-input');
+                const qty = parseInt(qtyInput.value) || 0;
+                const unitPriceEl = item.querySelector('.unit-price');
+                const unitPrice = parseFloat(unitPriceEl?.dataset?.unitPrice || unitPriceEl?.textContent.replace('₹', '') || 0);
+                const lineTotal = unitPrice * qty;
+                const lineTotalEl = item.querySelector('.line-total');
+                if (lineTotalEl) lineTotalEl.textContent = lineTotal.toFixed(2);
+                subtotal += lineTotal;
             });
-        });
-        document.querySelectorAll('.increment-btn').forEach(button => {
-            button.addEventListener('click', async () => {
-                const bookId = button.getAttribute('data-book-id');
-                const input = document.querySelector(`.quantity-input[data-book-id="${bookId}"]`);
-                const maxQuantity = document.querySelector(`.quantity-input[data-book-id="${bookId}"]`).getAttribute('max');
-                if (parseInt(input.value) >= maxQuantity) {
-                    alert(`Only ${maxQuantity} copies available`);
+
+            const orderSummary = document.getElementById('order-summary');
+            const taxRate = parseFloat(orderSummary.dataset.taxRate) || 0;
+            const shippingCharge = parseFloat(orderSummary.dataset.shippingCharge) || 35;
+            const shippingThreshold = parseFloat(orderSummary.dataset.shippingThreshold) || 35;
+
+            const shipping = subtotal > shippingThreshold ? 0 : (subtotal === 0 ? 0 : shippingCharge);
+            const tax = subtotal * taxRate;
+            const total = subtotal + tax + shipping;
+
+            document.getElementById('summary-subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('summary-shipping').textContent = `₹${shipping.toFixed(2)}`;
+            document.getElementById('summary-tax').textContent = `₹${tax.toFixed(2)}`;
+            document.getElementById('summary-total').textContent = `₹${total.toFixed(2)}`;
+
+            const countEl = document.getElementById('summary-count');
+            const cartCountText = document.getElementById('cart-count-text');
+            const itemsCount = items.length;
+            if (countEl) countEl.textContent = itemsCount;
+            if (cartCountText) cartCountText.textContent = `You have ${itemsCount} items in your cart`;
+
+            const checkoutBtn = document.getElementById('proceedToCheckoutBtn');
+            if (items.length > 0 && subtotal > 0) {
+                checkoutBtn.disabled = false;
+                checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                checkoutBtn.disabled = true;
+                checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        };
+
+        const attachCartHandlersFor = (itemEl) => {
+            const bookId = itemEl.getAttribute('data-book-id');
+            const incBtn = itemEl.querySelector('.increment-btn');
+            const decBtn = itemEl.querySelector('.decrement-btn');
+            const qtyInput = itemEl.querySelector('.quantity-input');
+            const removeBtn = itemEl.querySelector('.remove-from-cart-btn');
+
+            if (incBtn) {
+                incBtn.addEventListener('click', async () => {
+                    const maxQty = parseInt(qtyInput.getAttribute('max') || '9999', 10);
+                    const current = parseInt(qtyInput.value || '0', 10);
+                    if (current >= maxQty) {
+                        alert(`Only ${maxQty} copies available`);
+                        return;
+                    }
+                    qtyInput.value = current + 1;
+                    const ok = await updateQuantityOnServer(bookId, parseInt(qtyInput.value, 10));
+                    if (!ok) alert('Failed to update quantity on server');
+                    recalcTotals();
+                });
+            }
+
+            if (decBtn) {
+                decBtn.addEventListener('click', async () => {
+                    const current = parseInt(qtyInput.value || '0', 10);
+                    if (current > 1) {
+                        qtyInput.value = current - 1;
+                        const ok = await updateQuantityOnServer(bookId, parseInt(qtyInput.value, 10));
+                        if (!ok) alert('Failed to update quantity on server');
+                        recalcTotals();
+                    }
+                });
+            }
+
+            if (qtyInput) {
+                qtyInput.addEventListener('change', async () => {
+                    let newQty = Math.max(1, parseInt(qtyInput.value || '1', 10));
+                    const maxQty = parseInt(qtyInput.getAttribute('max') || '9999', 10);
+                    if (newQty > maxQty) {
+                        newQty = maxQty;
+                        qtyInput.value = maxQty;
+                        alert(`Only ${maxQty} copies available`);
+                    } else {
+                        qtyInput.value = newQty;
+                    }
+                    const ok = await updateQuantityOnServer(bookId, newQty);
+                    if (!ok) alert('Failed to update quantity on server');
+                    recalcTotals();
+                });
+            }
+
+            if (removeBtn) {
+                removeBtn.addEventListener('click', async () => {
+                    const ok = await removeFromCartOnServer(bookId);
+                    if (ok) {
+                        itemEl.remove();
+                        recalcTotals();
+                        alert('Item removed from cart successfully!');
+                    } else {
+                        alert('Failed to remove item from cart');
+                    }
+                });
+            }
+        };
+
+        document.querySelectorAll('.cart-item').forEach(el => attachCartHandlersFor(el));
+
+        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const bookId = btn.getAttribute('data-book-id');
+                const title = btn.getAttribute('data-title') || '';
+                const author = btn.getAttribute('data-author') || '';
+                const price = parseFloat(btn.getAttribute('data-price') || '0');
+                const image = btn.getAttribute('data-image') || '';
+                const rating = btn.getAttribute('data-rating') || 0;
+
+                const ok = await addToCartOnServer(bookId, 1);
+                if (!ok) {
+                    alert('Failed to add to cart');
                     return;
                 }
-                input.value = parseInt(input.value) + 1;
-                try {
-                    const response = await fetch('/buyer/cart/update-quantity', {
-                        method: 'PATCH',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ bookId, quantity: parseInt(input.value) }),
-                    });
-                    if (!response.ok) {
-                        const error = await response.json();
-                        alert(`Failed to update quantity: ${error.message}`);
-                    }
-                } catch (err) {
-                    console.error('Error updating quantity:', err);
-                    alert('An error occurred while updating the quantity.');
+
+                const existing = document.querySelector(`.cart-item[data-book-id="${bookId}"]`);
+                if (existing) {
+                    const qtyInput = existing.querySelector('.quantity-input');
+                    qtyInput.value = parseInt(qtyInput.value || '0', 10) + 1;
+                    recalcTotals();
+                } else {
+                    const cartItemsContainer = document.getElementById('cart-items');
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'flex items-center p-6 space-x-4 cart-item';
+                    itemDiv.setAttribute('data-book-id', bookId);
+                    itemDiv.innerHTML = `
+                        <img src="${image}" alt="${title}" class="object-cover w-24 h-32 rounded-lg">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900"><a href="/buyer/product/${bookId}">${title}</a></h3>
+                            <p class="text-gray-600">by ${author}</p>
+                            <div class="flex items-center mt-2">
+                                <div class="flex text-yellow-400">
+                                    ${Array.from({length: Math.floor(rating || 0)}).map(()=>'<i class="fas fa-star"></i>').join('')}
+                                    ${(rating % 1 !== 0) ? '<i class="fas fa-star-half-alt"></i>' : ''}
+                                </div>
+                                <span class="ml-2 text-gray-600">${rating}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center border rounded-lg">
+                                <button type="button" class="px-3 py-1 text-gray-600 hover:text-purple-600 decrement-btn" data-book-id="${bookId}"><i class="fas fa-minus"></i></button>
+                                <input type="number" value="1" min="1" max="9999" class="w-12 text-center border-x focus:outline-none focus:ring-0 quantity-input" data-book-id="${bookId}">
+                                <button type="button" class="px-3 py-1 text-gray-600 hover:text-purple-600 increment-btn" data-book-id="${bookId}"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-lg font-bold text-gray-900 unit-price" data-unit-price="${price}">₹${price}</p>
+                                <p class="text-sm text-gray-600">Item total: ₹<span class="line-total">${(price * 1).toFixed(2)}</span></p>
+                                <button type="button" class="text-sm text-red-500 hover:text-red-600 remove-from-cart-btn" data-book-id="${bookId}">Remove</button>
+                            </div>
+                        </div>
+                    `;
+                    cartItemsContainer.prepend(itemDiv);
+                    attachCartHandlersFor(itemDiv);
+                    recalcTotals();
                 }
+
+                const wishlistItemEl = btn.closest('.wishlist-item');
+                if (wishlistItemEl) wishlistItemEl.remove();
             });
         });
 
-        document.querySelectorAll('.decrement-btn').forEach(button => {
-            button.addEventListener('click', async () => {
-                const bookId = button.getAttribute('data-book-id');
-                const input = document.querySelector(`.quantity-input[data-book-id="${bookId}"]`);
-                if (parseInt(input.value) > 1) {
-                    input.value = parseInt(input.value) - 1;
-
-                    try {
-                        const response = await fetch('/buyer/cart/update-quantity', {
-                            method: 'PATCH',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ bookId, quantity: parseInt(input.value) }),
-                        });
-
-                        if (!response.ok) {
-                            const error = await response.json();
-                            alert(`Failed to update quantity: ${error.message}`);
-                        }
-                    } catch (err) {
-                        console.error('Error updating quantity:', err);
-                        alert('An error occurred while updating the quantity.');
-                    }
-                }
-            });
-        });
-
-        document.querySelectorAll('.remove-from-wishlist-btn').forEach(button => {
-            button.addEventListener('click', async (event) => {
-                const bookId = button.getAttribute('data-book-id'); // Get the book ID from the button
-
+        document.querySelectorAll('.remove-from-wishlist-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const bookId = btn.getAttribute('data-book-id');
                 try {
-                    const response = await fetch('/buyer/wishlist/remove', {
-                        method: 'DELETE', // Use DELETE method for better semantics
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ bookId }), // Send the book ID in the request body
+                    const res = await fetch('/buyer/wishlist/remove', {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ bookId }),
                     });
 
-                    if (response.ok) {
+                    if (res.ok) {
                         alert('Item removed from favorites successfully!');
-                        location.reload(); // Reload the page to update the wishlist
+                        const el = btn.closest('.wishlist-item');
+                        if (el) el.remove();
                     } else {
-                        const error = await response.json();
+                        const error = await res.json();
                         alert(`Failed to remove item: ${error.message}`);
                     }
                 } catch (err) {
@@ -363,7 +473,10 @@
                 }
             });
         });
+
+        recalcTotals();
     </script>
+
 </body>
 
 </html>

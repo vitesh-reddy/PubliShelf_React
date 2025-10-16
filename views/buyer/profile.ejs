@@ -421,11 +421,21 @@
             color: #666;
         }
 
+        .dialog .save-btn.saving {
+            background: var(--gradient);
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
         .error-message {
             color: #e63946;
             font-size: 12px;
             margin-top: 5px;
             display: none;
+        }
+
+        .error-message.show {
+            display: block;
         }
 
         @keyframes slideIn {
@@ -454,6 +464,7 @@
             .profile-card {
                 position: static;
             }
+
             .order-actions {
                 flex-direction: row;
                 flex-wrap: wrap;
@@ -464,7 +475,6 @@
 
 <body>
     <div class="container">
-        <!-- Profile Card -->
         <div class="profile-card">
             <div class="profile-header">
                 <div class="profile-pic"></div>
@@ -520,9 +530,7 @@
             </div>
         </div>
 
-        <!-- Orders and Wishlist Sections -->
         <div>
-            <!-- Orders Section -->
             <div class="orders-section">
                 <h3 class="section-title">Your Orders</h3>
                 <% if (user.orders && user.orders.length> 0) { %>
@@ -553,7 +561,7 @@
                                     </p>
                                 </div>
                                 <div>
-                                    <img src="<%= order.book.image || 'https://m.media-amazon.com/images/I/61R+Cpm+HxL._SL1000_.jpg' %>"
+                                    <img src="<%= order.book.image || 'https://m.media-amazon.com/images/I/61R+Cpm+HxL.SL1000.jpg' %>"
                                         alt="<%= order.book.title %>" class="book-image">
                                     <div class="order-actions">
                                         <span class="status">
@@ -568,14 +576,13 @@
                                     <% } %>
             </div>
 
-            <!-- Wishlist Section -->
             <div class="wishlist-section">
                 <h3 class="section-title">Your Wishlist</h3>
                 <% if (user.wishlist && user.wishlist.length> 0) { %>
                     <div class="wishlist-grid">
                         <% user.wishlist.forEach(book=> { %>
                             <div class="wishlist-item">
-                                <img src="<%= book.image || 'https://m.media-amazon.com/images/I/61R+Cpm+HxL._SL1000_.jpg' %>"
+                                <img src="<%= book.image || 'https://m.media-amazon.com/images/I/61R+Cpm+HxL.SL1000.jpg' %>"
                                     alt="<%= book.title %>">
                                 <h4 style="color: var(--primary-purple); font-size: 14px; margin-bottom: 5px;">
                                     <%= book.title %>
@@ -596,7 +603,6 @@
         </div>
     </div>
 
-    <!-- Edit Profile Dialog -->
     <div class="dialog-overlay" id="editDialog">
         <div class="dialog">
             <h3>Edit Profile</h3>
@@ -617,13 +623,13 @@
                     <p class="error-message" id="emailError"></p>
                 </div>
 
-                <!-- Change Password Section -->
                 <div class="form-section">
                     <h4 style="color: rgb(55, 65, 81);">Change Password</h4>
                     <div>
                         <label for="currentPassword"
                             style="display: block; margin-bottom: 5px; color: rgb(55, 65, 81);">Current Password</label>
                         <input type="password" id="currentPassword" name="currentPassword">
+                        <p class="error-message" id="currentPasswordError"></p>
                     </div>
                     <div>
                         <label for="newPassword" style="display: block; margin-bottom: 5px; color: rgb(55, 65, 81);">New
@@ -641,14 +647,13 @@
                 <p id="errorMessage" style="color: red;"></p>
                 <div class="buttons">
                     <button type="button" class="btn cancel-btn" onclick="closeEditDialog()">Cancel</button>
-                    <button type="submit" class="btn save-btn">Save Changes</button>
+                    <button type="submit" class="btn save-btn" id="saveBtn">Save Changes</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        // Dialog control functions
         function openEditDialog() {
             const dialog = document.getElementById('editDialog');
             dialog.classList.add('open');
@@ -657,90 +662,17 @@
         function closeEditDialog() {
             const dialog = document.getElementById('editDialog');
             dialog.classList.remove('open');
-            // Reset error messages
             document.getElementById('emailError').style.display = 'none';
             document.getElementById('passwordError').style.display = 'none';
+            document.getElementById('currentPasswordError').style.display = 'none';
+            document.getElementById('errorMessage').innerText = '';
         }
 
-        // Close dialog when clicking outside
         document.getElementById('editDialog').addEventListener('click', (e) => {
             if (e.target === e.currentTarget) {
                 closeEditDialog();
             }
         });
-
-        // Form submission handling
-        // document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
-        //     e.preventDefault();
-
-        //     const firstName = document.getElementById('firstName').value.trim();
-        //     const lastName = document.getElementById('lastName').value.trim();
-        //     const email = document.getElementById('email').value.trim();
-        //     const currentPassword = document.getElementById('currentPassword').value;
-        //     const newPassword = document.getElementById('newPassword').value;
-        //     const confirmPassword = document.getElementById('confirmPassword').value;
-
-        //     // Reset error messages
-        //     const emailError = document.getElementById('emailError');
-        //     const passwordError = document.getElementById('passwordError');
-        //     emailError.style.display = 'none';
-        //     passwordError.style.display = 'none';
-
-        //     // Basic validation
-        //     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        //     if (!emailRegex.test(email)) {
-        //         emailError.textContent = 'Please enter a valid email address.';
-        //         emailError.style.display = 'block';
-        //         return;
-        //     }
-
-        //     if (newPassword || confirmPassword || currentPassword) {
-        //         if (!currentPassword) {
-        //             passwordError.textContent = 'Current password is required to change password.';
-        //             passwordError.style.display = 'block';
-        //             return;
-        //         }
-        //         if (newPassword !== confirmPassword) {
-        //             passwordError.textContent = 'New passwords do not match.';
-        //             passwordError.style.display = 'block';
-        //             return;
-        //         }
-        //     }
-
-        //     // Prepare data to send
-        //     const data = { firstName, lastName, email };
-        //     if (currentPassword && newPassword) {
-        //         data.currentPassword = currentPassword;
-        //         data.newPassword = newPassword;
-        //     }
-
-        //     try {
-        //         const response = await fetch('/api/buyer/profile', {
-        //             method: 'PUT',
-        //             headers: { 'Content-Type': 'application/json' },
-        //             body: JSON.stringify(data)
-        //         });
-
-        //         if (!response.ok) {
-        //             const errorData = await response.json();
-        //             throw new Error(errorData.message || 'Failed to update profile');
-        //         }
-
-        //         // Update the UI with new values
-        //         document.querySelector('.profile-header h2').textContent = `${firstName} ${lastName}`;
-        //         document.querySelectorAll('.value')[0].textContent = firstName;
-        //         document.querySelectorAll('.value')[1].textContent = lastName;
-        //         document.querySelectorAll('.value')[2].textContent = email;
-        //         document.querySelector('.profile-pic').setAttribute('data-initial', firstName[0].toUpperCase());
-
-        //         closeEditDialog();
-        //         alert('Profile updated successfully!');
-        //     } catch (error) {
-        //         console.error('Error updating profile:', error);
-        //         alert('Failed to update profile: ' + error.message);
-        //     }
-        // });
-
 
         document.getElementById("updateProfileForm").addEventListener("submit", async function (e) {
             e.preventDefault();
@@ -751,25 +683,35 @@
             const currentPassword = form.currentPassword.value.trim();
             const newPassword = form.newPassword.value.trim();
             const confirmPassword = form.confirmPassword.value.trim();
-
+            const saveBtn = document.getElementById('saveBtn');
             const errorMessage = document.getElementById("errorMessage");
-            errorMessage.innerText = ""; // Clear previous error
+            const currentPasswordError = document.getElementById("currentPasswordError");
+            const passwordError = document.getElementById("passwordError");
 
-            // Email validation
+            errorMessage.innerText = "";
+            currentPasswordError.innerText = "";
+            currentPasswordError.style.display = 'none';
+            passwordError.innerText = "";
+            passwordError.style.display = 'none';
+
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 errorMessage.innerText = "Please enter a valid email address.";
                 return;
             }
 
-            // Password match validation
-            console.log(newPassword !== confirmPassword);
-            if (newPassword !== confirmPassword) {
-                console.log("Passwords do not match.");
-                errorMessage.innerText = "Passwords do not match.";
-                return;
+            if (newPassword || confirmPassword) {
+                if (!currentPassword) {
+                    currentPasswordError.innerText = "Current password is required to change password.";
+                    currentPasswordError.style.display = 'block';
+                    return;
+                }
+                if (newPassword !== confirmPassword) {
+                    passwordError.innerText = "New passwords do not match.";
+                    passwordError.style.display = 'block';
+                    return;
+                }
             }
-
 
             const data = {
                 firstname: form.firstname.value.trim(),
@@ -780,6 +722,10 @@
             };
 
             try {
+                saveBtn.innerText = 'Saving...';
+                saveBtn.classList.add('saving');
+                saveBtn.disabled = true;
+
                 const res = await fetch(`/buyer/update-profile/${buyerId}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -787,7 +733,6 @@
                 });
 
                 const result = await res.json();
-                console.log("results ", result);
 
                 if (!result.success) {
                     errorMessage.innerText = result.message;
@@ -797,9 +742,12 @@
                 }
             } catch (err) {
                 errorMessage.innerText = "Something went wrong. Please try again.";
+            } finally {
+                saveBtn.innerText = 'Save Changes';
+                saveBtn.classList.remove('saving');
+                saveBtn.disabled = false;
             }
         });
-
     </script>
 </body>
 

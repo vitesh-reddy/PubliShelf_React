@@ -17,8 +17,7 @@ router.get("/dashboard/:key", checkAdminKey, async (req, res) => {
   try {
     const buyers = await getAllBuyers();
     const orders = await getAllOrders();
-    // const auctions = await getAllAuctions();
-    const auctions = []; // Placeholder
+    const auctions = [];
 
     const totalBuyers = buyers.length;
     const totalOrders = orders.length;

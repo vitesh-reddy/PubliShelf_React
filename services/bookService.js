@@ -31,45 +31,22 @@ export const createBook = async (bookData) => {
 };
 
 export const searchBooks = async (query) => {
-  if (!query) {
-    return []; 
+  if (!query) return [];
+
+  let results = await Book.find(
+    { $text: { $search: query } },
+    { score: { $meta: "textScore" } }
+  ).sort({ score: { $meta: "textScore" } });
+
+  if (results.length === 0) {
+    results = await Book.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { author: { $regex: query, $options: "i" } },
+        { genre: { $regex: query, $options: "i" } },
+      ],
+    });
   }
 
-  return await Book.find({
-    $or: [
-      { title: { $regex: query, $options: "i" } }, 
-      { author: { $regex: query, $options: "i" } }, 
-      { genre: { $regex: query, $options: "i" } }, 
-    ],
-  });
-};
-
-export const filterBooks = async (filters) => {
-  const { category, sort, condition, priceRange } = filters;
-
-  const query = {};
-  if (category && category !== "All") {
-    query.genre = category;
-  }
-  if (condition && condition !== "All") {
-    query.condition = condition;
-  }
-  if (priceRange) {
-    const [minPrice, maxPrice] = priceRange.split("-").map(Number);
-    query.price = { $gte: minPrice, $lte: maxPrice }; 
-  }
-
-  let books = await Book.find(query);
-
-  if (sort) {
-    if (sort === "priceLowToHigh") {
-      books = books.sort((a, b) => a.price - b.price);
-    } else if (sort === "priceHighToLow") {
-      books = books.sort((a, b) => b.price - a.price);
-    } else if (sort === "newestFirst") {
-      books = books.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    }
-  }
-
-  return books;
+  return results;
 };

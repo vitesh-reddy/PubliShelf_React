@@ -10,7 +10,6 @@
 </head>
 
 <body class="bg-gray-50">
-    <!-- Navbar -->
     <nav class="fixed w-full bg-white shadow-sm z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -59,10 +58,8 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="pt-16 pb-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <!-- Breadcrumb -->
             <nav class="flex mb-6" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-3">
                     <li class="inline-flex items-center">
@@ -88,10 +85,8 @@
                 </ol>
             </nav>
 
-            <!-- Auction Ongoing Details -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-                    <!-- Image and Document Section -->
                     <div class="space-y-4">
                         <div class="relative rounded-lg overflow-hidden">
                             <img src="<%= book.image || 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=600' %>"
@@ -102,7 +97,6 @@
                                     class="absolute top-3 left-3 bg-red-600 text-white px-2 py-1 rounded-full text-xs font-semibold animate-pulse">Live</span>
                                 <% } %>
                         </div>
-                        <!-- Document Carousel -->
                         <div class="relative">
                             <div id="document-carousel"
                                 class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth space-x-3">
@@ -117,7 +111,6 @@
                         </div>
                     </div>
 
-                    <!-- Auction Info -->
                     <div class="space-y-5">
                         <div>
                             <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
@@ -143,7 +136,6 @@
                                         class="font-semibold"></span></span>
                         </div>
 
-                        <!-- Auction Progress Bar -->
                         <div class="space-y-1">
                             <div class="flex justify-between text-gray-600 text-sm">
                                 <span>Time Remaining</span>
@@ -169,7 +161,6 @@
                             </div>
                         </div>
 
-                        <!-- Bid Input Form -->
                         <div class="space-y-3 flex items-end gap-1">
                             <div class="relative w-full">
                                 <label for="bid-amount" class="text-gray-600 text-sm">Your Bid (₹)</label>
@@ -209,7 +200,6 @@
                 <h3 class="text-xl font-bold mb-4 text-gray-900">Bidding History</h3>
                 <div class="bg-white rounded-xl shadow-lg p-5">
                     <% if (book.biddingHistory && book.biddingHistory.length> 0) { %>
-                        <!-- Summary Stats -->
                         <div class="flex justify-between items-center mb-4 pb-3 border-b">
                             <div>
                                 <p class="text-sm text-gray-600">Total Bids: <span class="font-semibold text-gray-800">
@@ -224,7 +214,6 @@
                             </div>
                         </div>
 
-                        <!-- Bids List -->
                         <% const getTimeAgo=(date)=> {
                             const now = new Date();
                             const seconds = Math.floor((now - date) / 1000);
@@ -331,7 +320,6 @@
                                     <% }); %>
                             </div>
 
-                            <!-- Pagination Controls (if you have many bids) -->
                             <% if (book.biddingHistory.length> 10) { %>
                                 <div class="flex justify-center mt-4">
                                     <button class="text-sm text-purple-600 hover:text-purple-800 font-medium">
@@ -341,7 +329,6 @@
                                 <% } %>
 
                                     <% } else { %>
-                                        <!-- Empty State -->
                                         <div class="text-center py-8">
                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                 class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24"
@@ -355,7 +342,6 @@
                                         <% } %>
                 </div>
             </div>
-            <!-- Bid Confirmation Modal -->
             <div id="bid-modal"
                 class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center hidden z-50">
                 <div class="bg-white rounded-lg p-5 w-full max-w-sm transform transition-all duration-200">
@@ -373,7 +359,6 @@
         </div>
     </div>
     <script>
-        // Auction data from EJS
         let currentBid = '<%=book.currentPrice%>' || '<%=book.basePrice%>';
         const minIncrement = 100;
         const buyerId = ' buyerId || "mock_buyer_id" ';
@@ -410,10 +395,8 @@
             }
         }
 
-        // Document carousel
         const carousel = document.getElementById('document-carousel');
 
-        // Bid modal handling
         const bidModal = document.getElementById('bid-modal');
         const modalBidAmount = document.getElementById('modal-bid-amount');
         const modalConfirm = document.getElementById('modal-confirm');

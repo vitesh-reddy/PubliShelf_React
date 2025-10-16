@@ -10,7 +10,6 @@
 </head>
 
 <body class="bg-gray-50">
-    <!-- Navbar -->
     <nav class="fixed w-full bg-white shadow-sm z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -57,10 +56,8 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="pt-16 pb-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <!-- Breadcrumb -->
             <nav class="flex mb-6" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-3">
                     <li class="inline-flex items-center">
@@ -86,10 +83,8 @@
                 </ol>
             </nav>
 
-            <!-- Auction Item Details -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-                    <!-- Image Section -->
                     <div class="space-y-4">
                         <div class="relative rounded-lg overflow-hidden">
                             <img src="<%= book.image || 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=600' %>"
@@ -98,7 +93,6 @@
                         </div>
                     </div>
 
-                    <!-- Item Info -->
                     <div class="space-y-5">
                         <div>
                             <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
@@ -162,7 +156,6 @@
                 </div>
             </div>
 
-            <!-- Terms and Conditions Modal -->
             <div id="tnc-modal"
                 class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center hidden z-50">
                 <div class="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
@@ -254,7 +247,6 @@
                 </div>
             </div>
 
-            <!-- Privacy Policy Modal -->
             <div id="privacy-modal"
                 class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center hidden z-50">
                 <div class="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
@@ -281,7 +273,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="bg-gray-800 text-gray-300沿着py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-center">
@@ -301,11 +292,11 @@
     </footer>
 
     <script>
-        // Pass auction end date from EJS to JavaScript
+        
         const auctionEnd = new Date('<%= book.auctionEnd %>');
         const auctionStatus = '<%= auctionStatus %>';
 
-        // Update countdown timer
+        
         function updateCountdown() {
             const now = new Date();
             const element = document.getElementById('countdown');
@@ -321,7 +312,7 @@
             }
         }
 
-        // Terms and Conditions and Privacy Policy modal handling
+        
         const tncModal = document.getElementById('tnc-modal');
         const privacyModal = document.getElementById('privacy-modal');
         const tncLink = document.getElementById('tnc-link');

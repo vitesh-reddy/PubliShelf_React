@@ -3,25 +3,9 @@ import styles from "../public/css/styles.js";
 import { protect } from "../middleware/authMiddleware.js";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
-import {
-  getBuyerById,
-  createBuyer,
-  updateBuyerDetails,
-  getTopSoldBooks,
-  getTrendingBooks,
-} from "../services/buyerService.js";
-import {
-  getAllBooks,
-  getBookById,
-  searchBooks,
-} from "../services/bookService.js";
-import {
-  getOngoingAuctions,
-  getFutureAuctions,
-  getEndedAuctions,
-  getAuctionItemById,
-  addBid,
-} from "../services/antiqueBookService.js";
+import { getBuyerById, createBuyer, updateBuyerDetails, getTopSoldBooks, getTrendingBooks } from "../services/buyerService.js";
+import { getAllBooks, getBookById, searchBooks } from "../services/bookService.js";
+import { getOngoingAuctions, getFutureAuctions, getEndedAuctions, getAuctionItemById, addBid } from "../services/antiqueBookService.js";
 import Buyer from "../models/Buyer.js";
 import Book from "../models/Book.js";
 
@@ -46,55 +30,27 @@ router.get("/dashboard", protect, async (req, res) => {
   }
 });
 
-router.get("/search-page", protect, async (req, res) => {
-  try {
-    const books = await getAllBooks();
-    res.render("buyer/search-page", {
-      newlyBooks: books,
-      books: books,
-      buyerName: req.user.firstname,
-      styles: styles,
-    });
-  } catch (error) {
-    console.error("Error loading buyer dashboard:", error);
-    res.status(500).send("Error loading dashboard");
-  }
-});
 
 router.get("/search", protect, async (req, res) => {
-  const searchQuery = req.query.q; 
   try {
-    const books = await searchBooks(searchQuery); 
-    res.render("buyer/search-page", {
-      newlyBooks: books,
-      books: books,
-      buyerName: req.user.firstname,
-      styles: styles,
-    });
-  } catch (error) {
-    console.error("Error during search:", error);
-    res.status(500).send("Error during search");
-  }
-});
+    const query = req.query.q || "";
+    let books = [];
 
-router.get("/filter", protect, async (req, res) => {
-  const { category, sort, condition, priceRange } = req.query;
-
-  try {
-    const filters = { category, sort, condition, priceRange };
-    const books = await filterBooks(filters); 
+    if (query) books = await searchBooks(query);
+    else books = await getAllBooks();
 
     res.render("buyer/search-page", {
       newlyBooks: books,
-      books: books,
+      books,
       buyerName: req.user.firstname,
-      styles: styles,
+      styles,
     });
   } catch (error) {
-    console.error("Error during filter/category search:", error);
-    res.status(500).send("Error during filter/category search");
+    console.error("Error loading search page:", error);
+    res.status(500).send("Error loading search page");
   }
 });
+
 
 router.get("/checkout", protect, async (req, res) => {
   try {
@@ -113,7 +69,6 @@ router.get("/checkout", protect, async (req, res) => {
       const total = subtotal + shipping + tax;
       return { subtotal, shipping, tax, total };
     };
-
     const orderSummary = calculateOrderSummary(cart);
 
     res.render("buyer/checkout", {
@@ -126,9 +81,6 @@ router.get("/checkout", protect, async (req, res) => {
   }
 });
 
-router.get("/signup", (req, res) => {
-  res.render("auth/signup-buyer", { styles: styles });
-});
 
 router.post("/signup", async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
@@ -159,6 +111,11 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+
+router.get("/signup", (req, res) => {
+  res.render("auth/signup-buyer", { styles: styles });
+});
+
 router.get("/product-detail/:id", protect, async (req, res) => {
   try {
     const bookId = req.params.id;
@@ -171,11 +128,17 @@ router.get("/product-detail/:id", protect, async (req, res) => {
       (item) => item.book._id.toString() === bookId
     );
 
+    const similarBooks = await Book.find({
+      genre: book.genre,
+      _id: { $ne: bookId }
+    }).limit(4);
+
     res.render("buyer/product-detail", {
       buyerName: buyer.firstname,
       styles: styles,
       book,
-      isInCart, 
+      isInCart,
+      similarBooks
     });
   } catch (error) {
     console.error("Error loading product details:", error);
@@ -383,22 +346,6 @@ router.get("/auction-page", protect, async (req, res) => {
   }
 });
 
-router.get("/auction-item-detail/:id", protect, async (req, res) => {
-  try {
-    const auctionId = req.params.id;
-
-    const book = await getAuctionItemById(auctionId);
-    if (!book) return res.status(404).send("Auction item not found");
-
-    res.render("buyer/auction-item-detail", {
-      buyerName: req.user.firstname,
-      book,
-    });
-  } catch (error) {
-    console.error("Error loading auction item details:", error);
-    res.status(500).send("Error loading auction item details");
-  }
-});
 
 router.get("/auction-ongoing/:id", protect, async (req, res) => {
   try {
@@ -418,6 +365,24 @@ router.get("/auction-ongoing/:id", protect, async (req, res) => {
     res
       .status(500)
       .send("An error occurred while fetching auction item details.");
+  }
+});
+
+
+router.get("/auction-item-detail/:id", protect, async (req, res) => {
+  try {
+    const auctionId = req.params.id;
+
+    const book = await getAuctionItemById(auctionId);
+    if (!book) return res.status(404).send("Auction item not found");
+
+    res.render("buyer/auction-item-detail", {
+      buyerName: req.user.firstname,
+      book,
+    });
+  } catch (error) {
+    console.error("Error loading auction item details:", error);
+    res.status(500).send("Error loading auction item details");
   }
 });
 

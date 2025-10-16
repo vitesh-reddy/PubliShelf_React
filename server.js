@@ -11,11 +11,7 @@ import styles from "./public/css/styles.js";
 import connectDB from "./config/db.js";
 import cookieParser from "cookie-parser";
 import Book from "./models/Book.js";
-import {
-  getMetrics,
-  getTopSoldBooks,
-  getTrendingBooks,
-} from "./services/buyerService.js";
+import { getMetrics, getTopSoldBooks, getTrendingBooks } from "./services/buyerService.js";
 import morgan from "morgan";
 import Visitor from "./models/Visitor.js";
 
@@ -32,6 +28,8 @@ connectDB(MONGODB_URI);
 app.use(morgan("tiny", {
   skip: (req) => req.url.match(/\.(css|js|png|jpg|ico|svg|woff2?)$/)
 }));
+
+
 
 
 app.use(express.json());

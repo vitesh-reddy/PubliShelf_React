@@ -27,17 +27,17 @@
 
       <!-- Signup Form -->
       <form id="signupForm" class="space-y-6">
-        <div class="bg-white p-8 rounded-xl shadow-lg space-y-6 animate-fade-in">
+        <div class="bg-white p-8  shadow-lg rounded-xl space-y-6 animate-fade-in">
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label for="firstname" class="block text-sm font-medium text-gray-700">First Name</label>
               <input type="text" id="firstname" name="firstname" required
-                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                class="mt-1 block w-full py-2 border px-3 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
             </div>
             <div>
               <label for="lastname" class="block text-sm font-medium text-gray-700">Last Name</label>
               <input type="text" id="lastname" name="lastname" required
-                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                class="mt-1 block w-full px-3 py-2 border-gray-300 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
             </div>
           </div>
 
@@ -119,6 +119,7 @@
     const confirmPasswordInput = document.getElementById('confirmPassword');
     const togglePasswordBtn = document.getElementById('togglePassword');
     const togglePasswordIcon = togglePasswordBtn.querySelector('i');
+    const signupButton = signupForm.querySelector('button[type="submit"]');
 
     togglePasswordBtn.addEventListener('click', () => {
       const type = passwordInput.type === 'password' ? 'text' : 'password';
@@ -129,7 +130,6 @@
 
     signupForm.addEventListener('submit', async (event) => {
       event.preventDefault();
-
       const firstname = document.getElementById('firstname').value.trim();
       const lastname = document.getElementById('lastname').value.trim();
       const publishingHouse = document.getElementById('publishingHouse').value.trim();
@@ -137,9 +137,22 @@
       const password = passwordInput.value;
       const confirmPassword = confirmPasswordInput.value;
       const terms = document.getElementById('terms').checked;
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      if (!firstname || !lastname || !publishingHouse || !email || !password) {
+      errorMessage.textContent = "";
+
+      if (!firstname || !lastname || !publishingHouse || !email || !password || !confirmPassword) {
         errorMessage.textContent = "All fields are required.";
+        return;
+      }
+
+      if (!emailPattern.test(email)) {
+        errorMessage.textContent = "Please enter a valid email address.";
+        return;
+      }
+
+      if (password.length < 3) {
+        errorMessage.textContent = "Password must be at least 3 characters long.";
         return;
       }
 
@@ -148,26 +161,42 @@
         return;
       }
 
+      if (!terms) {
+        errorMessage.textContent = "You must agree to the Terms and Privacy Policy.";
+        return;
+      }
+
+      signupButton.textContent = "Submitting...";
+      signupButton.disabled = true;
+      signupButton.classList.add("bg-purple-400", "cursor-not-allowed");
+      signupButton.classList.remove("bg-purple-600", "hover:bg-purple-700");
+
       try {
+        
         const response = await fetch('/publisher/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ firstname, lastname, publishingHouse, email, password }),
+          credentials: "include",
         });
 
         if (response.ok) {
-          await response.json();
           window.location.href = '/auth/login';
         } else {
           const errorData = await response.json();
           errorMessage.textContent = errorData.message || "An unexpected error occurred.";
         }
       } catch (error) {
-        console.error("Error during signup:", error);
         errorMessage.textContent = "An error occurred. Please try again later.";
       }
+
+      signupButton.textContent = "Create Publisher Account";
+      signupButton.disabled = false;
+      signupButton.classList.remove("bg-purple-400", "cursor-not-allowed");
+      signupButton.classList.add("bg-purple-600", "hover:bg-purple-700");
     });
   </script>
+
 </body>
 
 </html>

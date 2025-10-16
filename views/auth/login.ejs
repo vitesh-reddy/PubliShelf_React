@@ -14,7 +14,7 @@
 	<div
 		class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-purple-50 to-white">
 		<div class="max-w-md w-full">
-			<!-- Logo -->
+			
 			<div class="text-center mb-10">
 				<a href="/" class="inline-block">
 					<span
@@ -28,7 +28,7 @@
 				</p>
 			</div>
 
-			<!-- Login Form -->
+			
 			<form>
 				<div class="bg-white p-8 rounded-xl shadow-lg space-y-6 animate-fade-in">
 					<div class="space-y-4">
@@ -38,7 +38,7 @@
 								<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 									<i class="fas fa-envelope text-gray-400"></i>
 								</div>
-								<input id="email" name="email" type="email" required class="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg 
+								<input id="email" name="email" type="email" required class="appearance-none block w-full pr-3 pl-10 py-2 border border-gray-300 rounded-lg 
                                 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent
                                 placeholder-gray-400 transition-all duration-300" placeholder="user@gmail.com">
 							</div>
@@ -50,7 +50,7 @@
 								<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 									<i class="fas fa-lock text-gray-400"></i>
 								</div>
-								<input id="password" name="password" type="password" required class="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg 
+								<input id="password" name="password" type="password" required class="appearance-none w-full block pl-10 pr-3 py-2 border border-gray-300 rounded-lg 
                                 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent
                                 placeholder-gray-400 transition-all duration-300" placeholder="••••••••">
 								<button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -73,7 +73,6 @@
 							password?</a>
 					</div>
 
-					<!--  -->
 					<button onclick="() => alert(`Hii`)" type="submit" id="SignInButtonInAuthLogin"
 						class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-300 transform hover:-translate-y-0.5">
 						Sign in
@@ -81,7 +80,6 @@
 				</div>
 			</form>
 
-			<!-- Signup Options Modal -->
 			<div id="signupModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
 				<div class="bg-white p-8 rounded-xl shadow-xl max-w-md w-full mx-4 transform transition-all duration-300">
 					<div class="flex justify-between items-center mb-6">
@@ -102,7 +100,7 @@
 							</div>
 						</a>
 						<a href="/publisher/signup"
-							class="block w-full p-4 border border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all duration-300">
+							class="block w-full  border border-gray-200 p-4 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all duration-300">
 							<div class="flex items-center">
 								<i class="fas fa-book-open text-2xl text-purple-600 mr-4"></i>
 								<div>
@@ -132,35 +130,56 @@
 		const displayContent = document.getElementById('PasswordIncorrectClass');
 
 		signupbutton.addEventListener('click', async (event) => {
-			const myemail = document.getElementById('email').value;
-			const mypassword = document.getElementById('password').value;
-			console.log('Hii');
 			event.preventDefault();
+
+			const myemail = document.getElementById('email').value.trim();
+			const mypassword = document.getElementById('password').value;
+
+			displayContent.textContent = "";
+
+			const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!emailPattern.test(myemail)) {
+				displayContent.textContent = "Please enter a valid email address.";
+				return;
+			}
+
+			if (mypassword.length < 3) {
+				displayContent.textContent = "Password must be at least 3 characters long.";
+				return;
+			}
+
+			signupbutton.textContent = "Signing in...";
+			signupbutton.disabled = true;
+			signupbutton.classList.add("bg-purple-400", "cursor-not-allowed");
+			signupbutton.classList.remove("bg-purple-600", "hover:bg-purple-700");
 
 			try {
 				const res = await fetch('/auth/login', {
 					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
+					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ email: myemail, password: mypassword }),
-				});	
-				const data = await res.json();			
-				if (res.status == 401 || res.status == 403) 
-					displayContent.innerHTML = data.message;
-				else if (res.status == 200)
+					credentials: "include",
+				});
+
+				const data = await res.json();
+
+				if (res.status === 401 || res.status === 403) {
+					displayContent.textContent = data.message;
+				} else if (res.status === 200) {
 					window.location.href = `/${data.user.role}/dashboard`;
-				else  
-					console.log("paalu thaagi bajjo");
-			}
-			catch (error) {
-				console.log("Hii", error);
+				} else {
+					displayContent.textContent = "Unexpected error occurred. Please try again.";
+				}
+			} catch (error) {
+				console.error("Error during login:", error);
+				displayContent.textContent = "An error occurred. Please try again later.";
 			}
 
+			signupbutton.textContent = "Sign in";
+			signupbutton.disabled = false;
+			signupbutton.classList.remove("bg-purple-400", "cursor-not-allowed");
+			signupbutton.classList.add("bg-purple-600", "hover:bg-purple-700");
 		});
-
-
-
 
 		document.addEventListener('DOMContentLoaded', () => {
 			const showSignupOptions = document.getElementById('showSignupOptions');
@@ -170,30 +189,31 @@
 			const togglePassword = document.querySelector('.fa-eye');
 
 			showSignupOptions.addEventListener('click', () => {
-				signupModal.classList.remove('hidden');
-				document.body.style.overflow = 'hidden';
+			signupModal.classList.remove('hidden');
+			document.body.style.overflow = 'hidden';
 			});
 
 			closeModal.addEventListener('click', () => {
-				signupModal.classList.add('hidden');
-				document.body.style.overflow = 'auto';
+			signupModal.classList.add('hidden');
+			document.body.style.overflow = 'auto';
 			});
 
 			signupModal.addEventListener('click', (e) => {
-				if (e.target === signupModal) {
-					signupModal.classList.add('hidden');
-					document.body.style.overflow = 'auto';
-				}
+			if (e.target === signupModal) {
+				signupModal.classList.add('hidden');
+				document.body.style.overflow = 'auto';
+			}
 			});
 
 			togglePassword.addEventListener('click', () => {
-				const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-				passwordInput.setAttribute('type', type);
-				togglePassword.classList.toggle('fa-eye');
-				togglePassword.classList.toggle('fa-eye-slash');
+			const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+			passwordInput.setAttribute('type', type);
+			togglePassword.classList.toggle('fa-eye');
+			togglePassword.classList.toggle('fa-eye-slash');
 			});
 		});
 	</script>
+
 </body>
 
 </html>

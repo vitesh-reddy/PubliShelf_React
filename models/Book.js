@@ -8,17 +8,24 @@ const reviewSchema = new mongoose.Schema({
 });
 
 const bookSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  author: { type: String, required: true },
+  title: { type: String, required: true, index: true },
+  author: { type: String, required: true, index: true },
   description: { type: String },
-  genre: { type: String },
+  genre: { type: String, index: true },
   price: { type: Number, required: true },
   quantity: { type: Number, default: 0 },
   image: { type: String },
   rating: { type: Number, default: 0 },
   publisher: { type: mongoose.Schema.Types.ObjectId, ref: "Publisher" },
-  publishedAt: { type: Date, default: Date.now },  
+  publishedAt: { type: Date, default: Date.now },
   reviews: [reviewSchema],
+});
+
+bookSchema.index({
+  title: "text",
+  author: "text",
+  genre: "text",
+  description: "text",
 });
 
 const Book = mongoose.model("Book", bookSchema);

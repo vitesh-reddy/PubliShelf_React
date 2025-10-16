@@ -10,7 +10,6 @@
 </head>
 
 <body class="bg-gray-50">
-    <!-- Navbar -->
     <nav class="fixed w-full bg-white shadow-sm z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -49,21 +48,18 @@
                             <a href="/logout" class="block px-4 py-2 text-gray-700 hover:bg-purple-50">Logout</a>
                         </div>
                     </div>
-                    <!-- <div class="relative group">
                         <button class="flex items-center space-x-2 md:hidden">
                             <img src="https://img.icons8.com/?size=100&id=zxB19VPoVLjK&format=png&color=000000"
                                 alt="Profile" class="w-5 h-5 rounded-full">
                         </button>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="pt-16 pb-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <!-- Breadcrumb -->
             <nav class="flex mb-6" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-3">
                     <li class="inline-flex items-center">
@@ -81,7 +77,6 @@
                 </ol>
             </nav>
 
-            <!-- Ongoing Auctions Section -->
             <% if (ongoingAuctions && ongoingAuctions.length> 0) { %>
                 <h1 class="text-3xl font-bold text-gray-900 mb-8">Ongoing Auctions</h1>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -122,7 +117,6 @@
                 </div>
                 <% } %>
 
-                    <!-- Future Auctions Section -->
                     <% if (futureAuctions && futureAuctions.length> 0) { %>
                         <h1 class="text-3xl font-bold text-gray-900 mt-12 mb-8">Upcoming Auctions</h1>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -163,7 +157,6 @@
                         </div>
                         <% } %>
 
-                            <!-- Ended Auctions Section -->
                             <% if (endedAuctions && endedAuctions.length> 0) { %>
                                 <h1 class="text-3xl font-bold text-gray-900 mt-12 mb-8">Past Auctions</h1>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -206,7 +199,6 @@
                                 </div>
                                 <% } %>
 
-                                    <!-- Empty State -->
                                     <% if ((!ongoingAuctions || ongoingAuctions.length===0) && (!futureAuctions ||
                                         futureAuctions.length===0) && (!endedAuctions || endedAuctions.length===0)) { %>
                                         <div class="text-center py-12">
@@ -217,7 +209,6 @@
                                         </div>
                                         <% } %>
 
-                                            <!-- Terms and Conditions Modal -->
                                             <div id="tnc-modal"
                                                 class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center hidden z-50">
                                                 <div
@@ -231,12 +222,10 @@
                                                         </button>
                                                     </div>
                                                     <div class="text-gray-600 text-sm space-y-4">
-                                                        <!-- Terms content remains the same -->
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <!-- Privacy Policy Modal -->
                                             <div id="privacy-modal"
                                                 class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center hidden z-50">
                                                 <div
@@ -249,14 +238,12 @@
                                                         </button>
                                                     </div>
                                                     <div class="text-gray-600 text-sm space-y-4">
-                                                        <!-- Privacy content remains the same -->
                                                     </div>
                                                 </div>
                                             </div>
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="bg-gray-800 text-gray-300 py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-center">
@@ -276,11 +263,9 @@
     </footer>
 
     <script>
-        // Update countdown timers
         function updateCountdown() {
             const now = new Date();
 
-            // For ongoing auctions (countdown to end)
             document.querySelectorAll('.countdown[data-end]').forEach(element => {
                 const endTime = new Date(element.getAttribute('data-end'));
                 if (now < endTime) {
@@ -295,7 +280,6 @@
                 }
             });
 
-            // For future auctions (countdown to start)
             document.querySelectorAll('.countdown[data-start]').forEach(element => {
                 const startTime = new Date(element.getAttribute('data-start'));
                 if (now < startTime) {
@@ -311,7 +295,6 @@
             });
         }
 
-        // Terms and Conditions and Privacy Policy modal handling
         const tncModal = document.getElementById('tnc-modal');
         const privacyModal = document.getElementById('privacy-modal');
         const tncLink = document.getElementById('tnc-link');
@@ -325,7 +308,7 @@
 
         privacyLink.addEventListener('click', () => {
             privacyModal.classList.remove('hidden');
-        });
+        }); 
 
         tncClose.addEventListener('click', () => {
             tncModal.classList.add('hidden');
@@ -335,7 +318,6 @@
             privacyModal.classList.add('hidden');
         });
 
-        // Update countdown every second
         setInterval(updateCountdown, 1000);
         updateCountdown();
     </script>
