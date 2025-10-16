@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getAuctionItemDetail } from "../../../services/antiqueBook.services.js";
 
 const AuctionItemDetail = () => {
@@ -7,6 +7,7 @@ const AuctionItemDetail = () => {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAuctionItem();
@@ -30,10 +31,16 @@ const AuctionItemDetail = () => {
 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   if (error) return <div className="min-h-screen flex items-center justify-center text-red-500">{error}</div>;
+  if (!book) return <div className="min-h-screen flex items-center justify-center">Auction item not found</div>;
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      {book ? "Book data loaded" : "No data found"}
+    <div className="bg-gray-50">
+      <nav className="fixed w-full bg-white shadow-sm z-50">
+        <div className="max-w-7xl mx-auto px-4 py-4 font-semibold">Auction Detail</div>
+      </nav>
+      <div className="pt-16 pb-20 max-w-7xl mx-auto px-4">
+        <div className="bg-white rounded-xl shadow-lg p-6">Book detail section</div>
+      </div>
     </div>
   );
 };
