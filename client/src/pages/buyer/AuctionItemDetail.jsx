@@ -57,11 +57,26 @@ const AuctionItemDetail = () => {
           </ol>
         </nav>
 
-        <div className="bg-white rounded-xl shadow-lg p-6">Book detail section</div>
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+            <div>
+              <img
+                src={book.image || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=600"}
+                alt={book.title}
+                className="w-full h-96 object-cover rounded-lg"
+              />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">{book.title}</h1>
+              <p className="text-lg text-gray-600 mt-1">{book.author}</p>
+              <p className="text-gray-600 text-sm">Genre: {book.genre}</p>
+              <p className="text-gray-600 text-sm">Condition: {book.condition}</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
 export default AuctionItemDetail;
-''
