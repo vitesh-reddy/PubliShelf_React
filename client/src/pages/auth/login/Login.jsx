@@ -4,9 +4,18 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setIsLoading(true);
+    setTimeout(() => {
+      if (email === "" || password === "") {
+        setError("Please fill in all fields");
+      }
+      setIsLoading(false);
+    }, 1000);
   };
 
   return (
@@ -28,12 +37,15 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}
-        <button type="submit" className="w-full bg-purple-600 text-white py-2 rounded">
-          Login
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-purple-600 text-white py-2 rounded"
+        >
+          {isLoading ? "Signing in..." : "Login"}
         </button>
       </form>
     </div>
   );
 };
-
 export default Login;
