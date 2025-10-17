@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
@@ -14,9 +15,10 @@ const Contact = () => {
     e.preventDefault();
     setLoading(true);
     setTimeout(() => {
+      setSubmitted(true);
       setLoading(false);
       setFormData({ name: "", email: "", message: "" });
-    }, 700);
+    }, 800);
   };
 
   return (
@@ -89,6 +91,7 @@ const Contact = () => {
               <button type="submit" disabled={loading} className="w-full bg-purple-600 text-white py-3 rounded-lg">
                 {loading ? "Sending..." : "Send Message"}
               </button>
+              {submitted && <p className="text-green-600 text-center mt-4">Thank you! Your message has been sent.</p>}
             </form>
           </div>
         </div>
