@@ -1,6 +1,7 @@
 //client/src/pages/public/Contact.jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { FaMapMarkerAlt, FaPhone, FaEnvelope } from "react-icons/fa";
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -48,51 +49,73 @@ const Contact = () => {
           </div>
 
           <div className="grid md:grid-cols-2 gap-12">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  placeholder="Enter your name"
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                />
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Get in Touch</h2>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="Enter your name"
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="Enter your email"
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows="4"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    placeholder="Enter your message"
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  />
+                </div>
+                <button type="submit" disabled={loading} className="w-full bg-purple-600 text-white py-3 rounded-lg">
+                  {loading ? "Sending..." : "Send Message"}
+                </button>
+                {submitted && <p className="text-green-600 text-center mt-4">Thank you! Your message has been sent.</p>}
+              </form>
+            </div>
+
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h2>
+              <p className="text-gray-600">Have questions or need assistance? We're here to help!</p>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                  <FaMapMarkerAlt className="text-purple-600 text-xl" />
+                  <span className="text-gray-700">IIIT SRI CITY, Gnan Marg Road, SRI CITY, 517541</span>
+                </div>
+                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                  <FaPhone className="text-purple-600 text-xl" />
+                  <span className="text-gray-700">+91 8714746146</span>
+                </div>
+                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                  <FaEnvelope className="text-purple-600 text-xl" />
+                  <span className="text-gray-700">support@publishelf.com</span>
+                </div>
               </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="Enter your email"
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                />
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows="4"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  placeholder="Enter your message"
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                />
-              </div>
-              <button type="submit" disabled={loading} className="w-full bg-purple-600 text-white py-3 rounded-lg">
-                {loading ? "Sending..." : "Send Message"}
-              </button>
-              {submitted && <p className="text-green-600 text-center mt-4">Thank you! Your message has been sent.</p>}
-            </form>
+            </div>
           </div>
         </div>
       </section>
