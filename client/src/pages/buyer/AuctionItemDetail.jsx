@@ -30,9 +30,18 @@ const AuctionItemDetail = () => {
     }
   };
 
+  const getAuctionStatus = () => {
+    const now = new Date();
+    if (now < new Date(book.auctionStart)) return "Upcoming";
+    if (now > new Date(book.auctionEnd)) return "Ended";
+    return "Active";
+  };
+
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   if (error) return <div className="min-h-screen flex items-center justify-center text-red-500">{error}</div>;
   if (!book) return <div className="min-h-screen flex items-center justify-center">Auction item not found</div>;
+
+  const status = getAuctionStatus();
 
   return (
     <div className="bg-gray-50">
@@ -66,11 +75,30 @@ const AuctionItemDetail = () => {
                 className="w-full h-96 object-cover rounded-lg"
               />
             </div>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">{book.title}</h1>
-              <p className="text-lg text-gray-600 mt-1">{book.author}</p>
-              <p className="text-gray-600 text-sm">Genre: {book.genre}</p>
-              <p className="text-gray-600 text-sm">Condition: {book.condition}</p>
+            <div className="space-y-5">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">{book.title}</h1>
+                <p className="text-lg text-gray-600 mt-1">{book.author}</p>
+              </div>
+
+              <div className="flex items-center space-x-3 text-sm">
+                <span className={`font-medium ${status === "Active" ? "text-green-600" : status === "Ended" ? "text-red-600" : "text-yellow-600"}`}>
+                  {status} Auction
+                </span>
+              </div>
+
+              <div className="border-t border-b py-3">
+                <div className="flex items-baseline space-x-4">
+                  <div>
+                    <span className="text-3xl font-bold text-gray-900">₹{book.currentPrice || book.basePrice}</span>
+                    <p className="text-gray-600 text-xs">Current Bid</p>
+                  </div>
+                  <div>
+                    <span className="text-lg text-gray-600">₹{book.basePrice}</span>
+                    <p className="text-gray-600 text-xs">Base Price</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
