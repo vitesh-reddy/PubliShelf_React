@@ -29,11 +29,17 @@ const Contact = () => {
           <div className="flex justify-between h-16">
             <div className="flex items-center">
               <Link to="/" className="flex items-center">
-                <span className="text-2xl font-bold">PubliShelf</span>
+                <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 text-transparent bg-clip-text">PubliShelf</span>
               </Link>
             </div>
+            <div className="hidden md:flex items-center space-x-8">
+              <Link to="/about" className="text-gray-700 hover:text-purple-600 transition-colors">About</Link>
+              <Link to="/contact" className="text-gray-700 hover:text-purple-600 transition-colors">Contact</Link>
+              <Link to="/#faq-section" className="text-gray-700 hover:text-purple-600 transition-colors">FAQ</Link>
+              <Link to="/buyer/dashboard" className="text-gray-700 hover:text-purple-600 transition-colors">Bookstores</Link>
+            </div>
             <div className="flex items-center space-x-4">
-              <Link to="/auth/login" className="bg-purple-600 text-white px-4 py-2 rounded-lg">Join Now</Link>
+              <Link to="/auth/login" className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 py-2 rounded-lg hover:-translate-y-[2px] transition-all duration-300">Join Now</Link>
             </div>
           </div>
         </div>
@@ -52,7 +58,7 @@ const Contact = () => {
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Get in Touch</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
+                <div className="form-group">
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
                   <input
                     type="text"
@@ -62,10 +68,10 @@ const Contact = () => {
                     onChange={handleInputChange}
                     placeholder="Enter your name"
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
-                <div>
+                <div className="form-group">
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                   <input
                     type="email"
@@ -75,10 +81,10 @@ const Contact = () => {
                     onChange={handleInputChange}
                     placeholder="Enter your email"
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
-                <div>
+                <div className="form-group">
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
                   <textarea
                     id="message"
@@ -88,19 +94,25 @@ const Contact = () => {
                     onChange={handleInputChange}
                     placeholder="Enter your message"
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
-                <button type="submit" disabled={loading} className="w-full bg-purple-600 text-white py-3 rounded-lg">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 disabled:opacity-50 transition"
+                >
                   {loading ? "Sending..." : "Send Message"}
                 </button>
-                {submitted && <p className="text-green-600 text-center mt-4">Thank you! Your message has been sent.</p>}
               </form>
+              {submitted && <p className="text-green-600 text-center mt-4">Thank you! Your message has been sent.</p>}
             </div>
 
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h2>
-              <p className="text-gray-600">Have questions or need assistance? We're here to help!</p>
+              <p className="text-gray-600">
+                Have questions or need assistance? We're here to help!
+              </p>
               <div className="space-y-4">
                 <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
                   <FaMapMarkerAlt className="text-purple-600 text-xl" />
