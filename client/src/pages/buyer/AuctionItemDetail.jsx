@@ -135,8 +135,38 @@ const AuctionItemDetail = () => {
         </div>
       </div>
 
-      <footer className="bg-gray-800 text-gray-300 py-6">
-        {/* ... */}
+      <footer class="footer">
+          <div class="footer-container">
+              <div class="footer-section">
+                  <h3 class="footer-title">PubliShelf</h3>
+                  <p class="footer-text">Your gateway to endless literary discoveries.</p>
+              </div>
+              <div class="footer-section">
+                  <h4 class="footer-subtitle">Quick Links</h4>
+                  <ul class="footer-links">
+                      <li><a href="/about" class="footer-link">About Us</a></li>
+                      <li><a href="/contact" class="footer-link">Contact</a></li>
+                      <li><a href="#" class="footer-link">Terms of Service</a></li>
+                      <li><a href="#" class="footer-link">Privacy Policy</a></li>
+                  </ul>
+              </div>
+              <div class="footer-section">
+                  <h4 class="footer-subtitle">Connect</h4>
+                  <div class="footer-social">
+                      <a href="#" class="footer-social-icon"><i class="fab fa-twitter"></i></a>
+                      <a href="#" class="footer-social-icon"><i class="fab fa-facebook"></i></a>
+                      <a href="#" class="footer-social-icon"><i class="fab fa-instagram"></i></a>
+                      <a href="#" class="footer-social-icon"><i class="fab fa-linkedin"></i></a>
+                  </div>
+              </div>
+              <div class="footer-section">
+                  <h4 class="footer-subtitle">Newsletter</h4>
+                  <form class="footer-newsletter">
+                      <input type="email" placeholder="Enter your email" class="footer-newsletter-input"/>
+                      <button class="footer-newsletter-btn">Subscribe</button>
+                  </form>
+              </div>
+          </div>
       </footer>
     </div>
   );
