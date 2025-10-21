@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaMapMarkerAlt, FaPhone, FaEnvelope } from "react-icons/fa";
-import { FaTwitter, FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -16,6 +15,7 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    // Simulate API call
     setTimeout(() => {
       setSubmitted(true);
       setLoading(false);
@@ -25,6 +25,7 @@ const Contact = () => {
 
   return (
     <>
+      {/* Navbar */}
       <nav className="fixed w-full bg-white shadow-sm z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
@@ -46,6 +47,7 @@ const Contact = () => {
         </div>
       </nav>
 
+      {/* Contact Section */}
       <section className="min-h-screen pt-16 bg-white">
         <div className="contact-container max-w-7xl mx-auto px-4 py-16">
           <div className="contact-header text-center mb-16">
@@ -133,6 +135,7 @@ const Contact = () => {
         </div>
       </section>
 
+      {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
