@@ -17,7 +17,6 @@ const Login = () => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
-
     try {
       const response = await login({ email, password });
       if (response.success) {
