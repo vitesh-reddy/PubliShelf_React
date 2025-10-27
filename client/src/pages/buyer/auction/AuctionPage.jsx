@@ -2,6 +2,18 @@
 import React from "react";
 
 const AuctionPage = () => {
+  const ongoingAuctions = [
+    {
+      _id: "1",
+      title: "The Great Gatsby",
+      author: "F. Scott Fitzgerald",
+      image: "https://via.placeholder.com/300x400",
+      currentPrice: 850,
+      basePrice: 500,
+      auctionEnd: new Date(Date.now() + 86400000).toISOString(),
+    },
+  ];
+
   return (
     <div className="bg-gray-50">
       <nav className="fixed w-full bg-white shadow-sm z-50">
@@ -58,10 +70,32 @@ const AuctionPage = () => {
             </ol>
           </nav>
 
-          <div className="text-center py-12">
-            <i className="fas fa-book-open text-5xl text-gray-300 mb-4"></i>
-            <h2 className="text-2xl font-semibold text-gray-700">No auctions available</h2>
-            <p className="text-gray-500 mt-2">Check back later for new antique book auctions</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">Ongoing Auctions</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {ongoingAuctions.map(book => (
+              <div key={book._id} className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 ease hover:translate-y-[-4px] hover:shadow-xl">
+                <div className="relative">
+                  <img src={book.image} alt={book.title} className="w-full h-[260px] object-cover" />
+                </div>
+                <div className="px-4 py-2">
+                  <h3 className="text-lg font-semibold text-gray-900">{book.title}</h3>
+                  <p className="text-gray-600 text-sm">{book.author}</p>
+                  <div className="mt-2 flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">Current Bid</p>
+                      <p className="text-lg font-bold text-purple-600">₹{book.currentPrice || book.basePrice}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 text-sm">Ends in</p>
+                      <p className="text-sm font-semibold">1d 0h 0m 0s</p>
+                    </div>
+                  </div>
+                  <button className="mt-4 mb-1 w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                    View Auction
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
