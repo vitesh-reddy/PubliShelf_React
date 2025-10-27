@@ -1,18 +1,17 @@
 
-import React from "react";
+import React, { useState } from "react";
 
 const Profile = () => {
-  const publisher = {
-    name: "John Doe",
-    firstname: "John",
+  const [publisher] = useState({
+    firstname36: "John",
     lastname: "Doe",
     email: "john@example.com",
     publishingHouse: "Doe Publishing",
     status: "active",
     createdAt: "2024-01-15T00:00:00.000Z"
-  };
+  });
 
-  const soldBooks = [
+  const [soldBooks] = useState([
     {
       _id: "1",
       title: "The Great Adventure",
@@ -24,36 +23,22 @@ const Profile = () => {
       totalRevenue: 44850,
       images: ["https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=120"]
     }
-  ];
+  ]);
 
-  const analytics = { totalRevenue: 44850 };
+  const [analytics] = useState({ totalRevenue: 44850 });
 
   return (
     <div className="bg-gray-50 font-sans pt-16">
       <div className="max-w-7xl mx-auto px-4 py-8 grid lg:grid-cols-[350px_1fr] gap-6">
-        {/* Profile Card */}
         <div className="bg-white rounded-xl shadow-lg p-6 sticky top-20 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-purple-100">
           <div className="text-center pb-5">
             <div className="profile-pic" style={{
-              width: '140px',
-              height: '140px',
-              background: 'linear-gradient(135deg, #8b5cf6, #6b48ff)',
-              borderRadius: '50%',
-              margin: '0 auto 15px',
-              position: 'relative',
-              overflow: 'hidden',
-              border: '4px solid #fff',
-              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+              width: '140px', height: '140px', background: 'linear-gradient(135deg, #8b5cf6, #6b48ff)', borderRadius: '50%',
+              margin: '0 auto 15px', position: 'relative', overflow: 'hidden', border: '4px solid #fff', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)'
             }}>
-              <div style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                color: 'white',
-                fontSize: '60px',
-                fontWeight: 700
-              }}>J</div>
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', fontSize: '60px', fontWeight: 700 }}>
+                {publisher.firstname.charAt(0)}
+              </div>
             </div>
             <h2 className="text-2xl font-bold text-indigo-700">{publisher.firstname} {publisher.lastname}</h2>
             <p className="text-gray-600 text-sm">Member since {new Date(publisher.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
@@ -96,7 +81,6 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Books Section */}
         <div>
           <div className="bg-white rounded-xl shadow-lg p-6">
             {soldBooks.length > 0 ? (
@@ -125,7 +109,6 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Footer */}
       <footer className="bg-gray-800 text-gray-300 py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
