@@ -1,31 +1,42 @@
-
-import React, { useState } from "react";
+// client/src/pages/publisher/profile/Profile.jsx
+import React, { useState, useEffect } from "react";
 
 const Profile = () => {
-  const [publisher] = useState({
-    firstname36: "John",
-    lastname: "Doe",
-    email: "john@example.com",
-    publishingHouse: "Doe Publishing",
-    status: "active",
-    createdAt: "2024-01-15T00:00:00.000Z"
-  });
+  const [publisher, setPublisher] = useState(null);
+  const [soldBooks, setSoldBooks] = useState([]);
+  const [analytics, setAnalytics] = useState({ totalRevenue: 0 });
+  const [loading, setLoading] = useState(true);
 
-  const [soldBooks] = useState([
-    {
-      _id: "1",
-      title: "The Great Adventure",
-      author: "Jane Smith",
-      description: "An epic journey across unknown lands.",
-      genre: "Fiction",
-      basePrice: 299,
-      totalQuantity: 150,
-      totalRevenue: 44850,
-      images: ["https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=120"]
-    }
-  ]);
+  useEffect(() => {
+    setTimeout(() => {
+      setPublisher({
+        firstname: "John",
+        lastname: "Doe",
+        email: "john@example.com",
+        publishingHouse: "Doe Publishing",
+        status: "active",
+        createdAt: "2024-01-15T00:00:00.000Z"
+      });
+      setSoldBooks([
+        {
+          _id: "1",
+          title: "The Great Adventure",
+          author: "Jane Smith",
+          description: "An epic journey across unknown lands.",
+          genre: "Fiction",
+          basePrice: 299,
+          totalQuantity: 150,
+          totalRevenue: 44850,
+          images: ["https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=120"]
+        }
+      ]);
+      setAnalytics({ totalRevenue: 44850 });
+      setLoading(false);
+    }, 800);
+  }, []);
 
-  const [analytics] = useState({ totalRevenue: 44850 });
+  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  if (!publisher) return <div className="min-h-screen flex items-center justify-center">Profile not found</div>;
 
   return (
     <div className="bg-gray-50 font-sans pt-16">
