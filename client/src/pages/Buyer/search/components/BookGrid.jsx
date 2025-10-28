@@ -1,23 +1,21 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Import for navigation
+import { useNavigate } from "react-router-dom";
 
-const BookGrid = ({ books }) => { // 1. Receive 'books' prop
+const BookGrid = ({ books }) => {
   const navigate = useNavigate();
 
   return (
     <div id="bookGrid" className="grid grid-cols-2 md:grid-cols-4 gap-6">
-      {/* 2. Check if books array is empty */}
       {books.length === 0 ? (
         <div className="col-span-full text-center text-gray-500 py-10">
           No books found.
         </div>
       ) : (
-        // 3. Map over the books array
         books.map((book) => (
           <div
-            key={book._id} // Add unique key
+            key={book._id}
             className="relative bg-white rounded-lg shadow-md overflow-hidden hover:-translate-y-1 transition-transform cursor-pointer bookCardStyle"
-            onClick={() => navigate(`/buyer/product-detail/${book._id}`)} // Add navigation
+            onClick={() => navigate(`/buyer/product-detail/${book._id}`)}
           >
             <div className="relative w-full h-40 md:h-64 bg-gray-100 flex items-center justify-center">
               <img
@@ -44,8 +42,8 @@ const BookGrid = ({ books }) => { // 1. Receive 'books' prop
                   className="absolute bottom-3 right-3 z-20 text-gray-600 hover:text-red-500 transition-colors duration-200"
                   data-book-id={book._id}
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevent card click
-                    alert('Add to wishlist clicked'); // Placeholder action
+                    e.stopPropagation();
+                    alert('Add to wishlist clicked');
                   }}
                 >
                   <i className="far fa-heart text-xl"></i>
