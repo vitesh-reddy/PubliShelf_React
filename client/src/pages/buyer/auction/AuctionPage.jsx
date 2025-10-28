@@ -1,4 +1,3 @@
-// src/pages/buyer/AuctionPage.jsx
 import React from "react";
 
 const AuctionPage = () => {
@@ -11,6 +10,27 @@ const AuctionPage = () => {
       currentPrice: 850,
       basePrice: 500,
       auctionEnd: new Date(Date.now() + 86400000).toISOString(),
+    },
+  ];
+
+  const futureAuctions = [
+    {
+      _id: "2",
+      title: "1984",
+      author: "George Orwell",
+      image: "https://via.placeholder.com/300x400",
+      basePrice: 600,
+      auctionStart: new Date(Date.now() + 172800000).toISOString(),
+    },
+  ];
+
+  const endedAuctions = [
+    {
+      _id: "3",
+      title: "To Kill a Mockingbird",
+      author: "Harper Lee",
+      image: "https://via.placeholder.com/300x400",
+      currentPrice: 1200,
     },
   ];
 
@@ -92,6 +112,62 @@ const AuctionPage = () => {
                   </div>
                   <button className="mt-4 mb-1 w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
                     View Auction
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <h1 className="text-3xl font-bold text-gray-900 mt-12 mb-8">Upcoming Auctions</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {futureAuctions.map(book => (
+              <div key={book._id} className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 ease hover:translate-y-[-4px] hover:shadow-xl">
+                <div className="relative">
+                  <img src={book.image} alt={book.title} className="w-full h-[260px] object-cover" />
+                </div>
+                <div className="px-4 py-2">
+                  <h3 className="text-lg font-semibold text-gray-900">{book.title}</h3>
+                  <p className="text-gray-600 text-sm">{book.author}</p>
+                  <div className="mt-2 flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">Starting Bid</p>
+                      <p className="text-lg font-bold text-purple-600">₹{book.basePrice}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 text-sm">Starts in</p>
+                      <p className="text-sm font-semibold">2d 0h 0m 0s</p>
+                    </div>
+                  </div>
+                  <button className="mt-4 mb-1 w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                    View Details
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <h1 className="text-3xl font-bold text-gray-900 mt-12 mb-8">Past Auctions</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {endedAuctions.map(book => (
+              <div key={book._id} className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 ease hover:translate-y-[-4px] hover:shadow-xl">
+                <div className="relative">
+                  <img src={book.image} alt={book.title} className="w-full h-[260px] object-cover" />
+                </div>
+                <div className="px-4 py-2">
+                  <h3 className="text-lg font-semibold text-gray-900">{book.title}</h3>
+                  <p className="text-gray-600 text-sm">{book.author}</p>
+                  <div className="mt-2 flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">Final Price</p>
+                      <p className="text-lg font-bold text-purple-600">₹{book.currentPrice || "Not sold"}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 text-sm">Status</p>
+                      <p className="text-sm font-semibold">{book.currentPrice ? "Sold" : "Not sold"}</p>
+                    </div>
+                  </div>
+                  <button className="mt-4 mb-1 w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                    View Details
                   </button>
                 </div>
               </div>
