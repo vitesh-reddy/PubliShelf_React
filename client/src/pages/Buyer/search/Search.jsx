@@ -1,13 +1,19 @@
 import React from "react";
-import Navbar from "../components/Navbar.jsx"; // Assuming Navbar is created
-import Footer from "../components/Footer.jsx"; // Assuming Footer is created
-import BookGrid from "./components/BookGrid.jsx"; // New!
+import Navbar from "../components/Navbar.jsx";
+import Footer from "../components/Footer.jsx";
+import BookGrid from "./components/BookGrid.jsx";
+
+// 1. Add hardcoded data
+const hardcodedBooks = [
+  { _id: '1', title: 'Book One', author: 'Author A', price: 450, image: 'https://via.placeholder.com/300' },
+  { _id: '2', title: 'Book Two', author: 'Author B', price: 599, image: 'https://via.placeholder.com/300' },
+  { _id: '3', title: 'Book Three', author: 'Author C', price: 720, image: 'https://via.placeholder.com/300' }
+];
 
 const SearchPage = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      <Navbar /> {/* Now a component */}
-      
+      <Navbar />
       <div className="pt-16">
         {/* Category Links (stays in SearchPage) */}
         <div className="bg-white border-b">
@@ -62,13 +68,12 @@ const SearchPage = () => {
               </button>
             </div>
           </div>
-
-          {/* BookGrid is now a component */}
-          <BookGrid /> 
+          
+          {/* 2. Pass data as a prop */}
+          <BookGrid books={hardcodedBooks} />
         </div>
       </div>
-
-      <Footer /> {/* Now a component */}
+      <Footer />
     </div>
   );
 };
