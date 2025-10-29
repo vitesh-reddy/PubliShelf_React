@@ -46,6 +46,30 @@ const BuyerProfile = () => {
     }
   ]);
 
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [formData, setFormData] = useState({
+    firstname: user.firstname,
+    lastname: user.lastname,
+    email: user.email,
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const closeEditDialog = () => {
+    setShowEditDialog(false);
+    setFormData({
+      ...formData,
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
+  };
+
   const getTimeAgo = (date) => {
     return `Member since ${new Date(date).toLocaleString("en-US", { month: "long", year: "numeric" })}`;
   };
@@ -92,7 +116,10 @@ const BuyerProfile = () => {
             </div>
           </div>
           <div className="mt-[25px] flex gap-[15px]">
-            <button className="flex-1 p-[14px] border-none rounded-[8px] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] font-semibold text-[14px] uppercase tracking-[0.5px] bg-[linear-gradient(135deg,#8a4af3,#6b48ff)] text-white hover:brightness-110 hover:-translate-y-[2px]">
+            <button
+              className="flex-1 p-[14px] border-none rounded-[8px] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] font-semibold text-[14px] uppercase tracking-[0.5px] bg-[linear-gradient(135deg,#8a4af3,#6b48ff)] text-white hover:brightness-110 hover:-translate-y-[2px]"
+              onClick={() => setShowEditDialog(true)}
+            >
               Edit Profile
             </button>
             <button className="flex-1 p-[14px] border-none rounded-[8px] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] font-semibold text-[14px] uppercase tracking-[0.5px] bg-[#eee] text-[#666] hover:bg-[#ddd] hover:-translate-y-[2px]">
@@ -184,6 +211,120 @@ const BuyerProfile = () => {
               <p className="text-center text-[#666]">Your wishlist is empty.</p>
             )}
           </div>
+        </div>
+      </div>
+
+      <div
+        className={`fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.5)] flex items-center justify-center z-[100] opacity-0 invisible transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+          showEditDialog ? "opacity-100 visible" : ""
+        }`}
+        onClick={closeEditDialog}
+      >
+        <div
+          className={`bg-white rounded-[12px] p-[30px] w-full max-w-[500px] shadow-[0_4px_15px_rgba(0,0,0,0.1)] scale-90 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+            showEditDialog ? "scale-100" : ""
+          }`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h3 className="text-black mb-[20px] text-[20px] font-semibold">Edit Profile</h3>
+          <form className="w-full flex flex-col justify-center items-center gap-[5px]">
+            <div>
+              <label htmlFor="firstname" className="block mb-[3px] text-[rgb(55,65,81)] text-[12px]">
+                First Name
+              </label>
+              <input
+                type="text"
+                id="firstname"
+                name="firstname"
+                value={formData.firstname}
+                onChange={handleInputChange}
+                className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
+              />
+            </div>
+            <div>
+              <label htmlFor="lastname" className="block mb-[3px] text-[rgb(55,65,81)] text-[12px]">
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="lastname"
+                name="lastname"
+                value={formData.lastname}
+                onChange={handleInputChange}
+                className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
+              />
+            </div>
+            <div>
+              <label htmlFor="email" className="block mb-[3px] text-[rgb(55,65,81)] text-[12px]">
+                Email
+              </label>
+              <input
+                type="text"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
+              />
+            </div>
+            <div className="w-full pt-[10px] border-t border-[#f5f5f5] mt-[15px]">
+              <h4 className="text-[#6b48ff] mb-[15px] text-[16px]">Change Password</h4>
+              <div>
+                <label htmlFor="currentPassword" className="block mb-[3px] text-[rgb(55,65,81)] text-[12px]">
+                  Current Password
+                </label>
+                <input
+                  type="password"
+                  id="currentPassword"
+                  name="currentPassword"
+                  value={formData.currentPassword}
+                  onChange={handleInputChange}
+                  className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
+                />
+              </div>
+              <div>
+                <label htmlFor="newPassword" className="block mb-[3px] text-[rgb(55,65,81)] text-[12px]">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  id="newPassword"
+                  name="newPassword"
+                  value={formData.newPassword}
+                  onChange={handleInputChange}
+                  className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
+                />
+              </div>
+              <div>
+                <label htmlFor="confirmPassword" className="block mb-[3px] text-[rgb(55,65,81)] text-[12px]">
+                  Confirm New Password
+                </label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
+                />
+              </div>
+            </div>
+            <div className="flex gap-[10px] mt-[6px]">
+              <button
+                type="button"
+                className="flex-1 border-none rounded-[8px] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] font-semibold uppercase tracking-[0.5px] p-[12px] text-[14px] bg-[#eee] text-[#666]"
+                onClick={closeEditDialog}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="border-none rounded-[8px] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] font-semibold uppercase tracking-[0.5px] p-[12px] text-[14px] bg-[linear-gradient(135deg,#8a4af3,#6b48ff)] text-white"
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
         </div>
       </div>
       <Footer />
