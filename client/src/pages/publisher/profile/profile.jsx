@@ -6,36 +6,44 @@ const Profile = () => {
   const [soldBooks, setSoldBooks] = useState([]);
   const [analytics, setAnalytics] = useState({ totalRevenue: 0 });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setTimeout(() => {
-      setPublisher({
-        firstname: "John",
-        lastname: "Doe",
-        email: "john@example.com",
-        publishingHouse: "Doe Publishing",
-        status: "active",
-        createdAt: "2024-01-15T00:00:00.000Z"
-      });
-      setSoldBooks([
-        {
-          _id: "1",
-          title: "The Great Adventure",
-          author: "Jane Smith",
-          description: "An epic journey across unknown lands.",
-          genre: "Fiction",
-          basePrice: 299,
-          totalQuantity: 150,
-          totalRevenue: 44850,
-          images: ["https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=120"]
-        }
-      ]);
-      setAnalytics({ totalRevenue: 44850 });
-      setLoading(false);
+      const shouldFail = false;
+      if (shouldFail) {
+        setError("Failed to fetch profile");
+        setLoading(false);
+      } else {
+        setPublisher({
+          firstname: "John",
+          lastname: "Doe",
+          email: "john@example.com",
+          publishingHouse: "Doe Publishing",
+          status: "active",
+          createdAt: "2024-01-15T00:00:00.000Z"
+        });
+        setSoldBooks([
+          {
+            _id: "1",
+            title: "The Great Adventure",
+            author: "Jane Smith",
+            description: "An epic journey across unknown lands.",
+            genre: "Fiction",
+            basePrice: 299,
+            totalQuantity: 150,
+            totalRevenue: 44850,
+            images: ["https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=120"]
+          }
+        ]);
+        setAnalytics({ totalRevenue: 44850 });
+        setLoading(false);
+      }
     }, 800);
   }, []);
 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  if (error) return <div className="min-h-screen flex items-center justify-center text-red-500">{error}</div>;
   if (!publisher) return <div className="min-h-screen flex items-center justify-center">Profile not found</div>;
 
   return (
