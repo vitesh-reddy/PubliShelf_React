@@ -1,22 +1,46 @@
-import React, { useState } from "react"; // Import useState
-import { Link } from "react-router-dom"; // Use Link for category
+import React, { useState, useEffect } from "react"; // Import useEffect
+import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import BookGrid from "./components/BookGrid.jsx";
-
-const hardcodedBooks = [
-  { _id: '1', title: 'Book One', author: 'Author A', price: 450, image: 'https://via.placeholder.com/300' },
-  { _id: '2', title: 'Book Two', author: 'Author B', price: 599, image: 'https://via.placeholder.com/300' },
-  { _id: '3', title: 'Book Three', author: 'Author C', price: 720, image: 'https://via.placeholder.com/300' }
-];
+// Assume searchBooks service exists
+import { searchBooks } from "../../../services/buyer.services.js"; 
 
 const SearchPage = () => {
-  // 1. Add state for filters
+  // 1. Add state for data fetching
+  const [allBooks, setAllBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Filter states (from previous step)
   const [currentCategory, setCurrentCategory] = useState("All Books");
   const [currentPriceFilter, setCurrentPriceFilter] = useState("all");
   const [currentSort, setCurrentSort] = useState("relevance");
 
-  // 2. Add handler functions
+  // 2. Add useEffect to fetch data
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        setLoading(true);
+        // We'll add the search query later. For now, fetch all.
+        const response = await searchBooks(""); 
+        if (response.success) {
+          setAllBooks(response.data.books || []);
+          setError("");
+        } else {
+          setAllBooks([]);
+          setError(response.message);
+        }
+      } catch (err) {
+        setAllBooks([]);
+        setError("Failed to fetch books");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBooks();
+  }, []); // Empty dependency array: runs once on mount
+
   const handleCategoryClick = (category) => setCurrentCategory(category);
   const handlePriceRangeChange = (e) => setCurrentPriceFilter(e.target.value);
   const handleSortChange = (e) => setCurrentSort(e.target.value);
@@ -26,13 +50,16 @@ const SearchPage = () => {
     setCurrentSort("relevance");
   };
 
+  // 3. Add loading and error UI
+  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  if (error) return <div className="min-h-screen flex items-center justify-center text-red-500">{error}</div>;
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Navbar />
       <div className="pt-16">
         <div className="bg-white border-b border-gray-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* 3. Wire up category links */}
             <div className="flex space-x-8 py-4">
               {["All Books", "Fiction", "Non-Fiction", "Mystery", "Science Fiction", "Romance", "Thriller", "Other"].map(category => (
                 <Link key={category} to="#" 
@@ -50,7 +77,6 @@ const SearchPage = () => {
               <p className="text-sm text-gray-500 hidden sm:block">Refine your results by price or sort preferences</p>
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              {/* 4. Wire up select elements */}
               <div className="relative">
                 <select value={currentSort} onChange={handleSortChange} className="appearance-none px-4 py-2.5 pr-10 rounded-lg border border-gray-300 bg-white text-gray-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
                   <option value="relevance">Sort by: Relevance</option>
@@ -80,7 +106,9 @@ const SearchPage = () => {
               </button>
             </div>
           </div>
-          <BookGrid books={hardcodedBooks} />
+          
+          {/* 4. Pass fetched books. Filtering not applied yet. */}
+          <BookGrid books={allBooks} />
         </div>
       </div>
       <Footer />
