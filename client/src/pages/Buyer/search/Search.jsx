@@ -1,28 +1,25 @@
-import React, { useState, useEffect } from "react"; // Import useEffect
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import BookGrid from "./components/BookGrid.jsx";
-// Assume searchBooks service exists
 import { searchBooks } from "../../../services/buyer.services.js"; 
 
 const SearchPage = () => {
-  // 1. Add state for data fetching
+  // 1. Add new state for *displayed* books
+  const [books, setBooks] = useState([]); 
   const [allBooks, setAllBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  // Filter states (from previous step)
   const [currentCategory, setCurrentCategory] = useState("All Books");
   const [currentPriceFilter, setCurrentPriceFilter] = useState("all");
   const [currentSort, setCurrentSort] = useState("relevance");
 
-  // 2. Add useEffect to fetch data
+  // Effect 1: Fetch all books (same as previous step)
   useEffect(() => {
     const fetchBooks = async () => {
       try {
         setLoading(true);
-        // We'll add the search query later. For now, fetch all.
         const response = await searchBooks(""); 
         if (response.success) {
           setAllBooks(response.data.books || []);
@@ -39,7 +36,46 @@ const SearchPage = () => {
       }
     };
     fetchBooks();
-  }, []); // Empty dependency array: runs once on mount
+  }, []);
+
+  // 2. Add Effect 2: Apply filters whenever data or filters change
+  useEffect(() => {
+    if (allBooks.length === 0) {
+      setBooks([]);
+      return;
+    };
+    
+    let filtered = [...allBooks];
+
+    // Filter by Category
+    if (currentCategory !== "All Books") {
+      filtered = filtered.filter((b) => b.genre?.toLowerCase().includes(currentCategory.toLowerCase()));
+    }
+
+    // Filter by Price
+    switch (currentPriceFilter) {
+      case "under500": filtered = filtered.filter((b) => (b.price || 0) < 500); break;
+      case "500-1000": filtered = filtered.filter((b) => (b.price || 0) >= 500 && (b.price || 0) <= 1000); break;
+      case "1000-2000": filtered = filtered.filter((b) => (b.price || 0) >= 1000 && (b.price || 0) <= 2000); break;
+      case "2000-3000": filtered = filtered.filter((b) => (b.price || 0) >= 2000 && (b.price || 0) <= 3000); break;
+      case "over3000": filtered = filtered.filter((b) => (b.price || 0) > 3000); break;
+      default: break;
+    }
+
+    // Sort
+    switch (currentSort) {
+      case "price-asc": filtered.sort((a,b) => (a.price || 0) - (b.price || 0)); break;
+      case "price-desc": filtered.sort((a,b) => (b.price || 0) - (a.price || 0)); break;
+      case "rating-asc": filtered.sort((a,b) => (a.rating || 0) - (b.rating || 0)); break;
+      case "rating-desc": filtered.sort((a,b) => (b.rating || 0) - (a.rating || 0)); break;
+      case "quantity-asc": filtered.sort((a,b) => (a.quantity || 0) - (b.quantity || 0)); break;
+      case "quantity-desc": filtered.sort((a,b) => (b.quantity || 0) - (a.quantity || 0)); break;
+      case "newest": filtered.sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt)); break;
+      default: break;
+    }
+    
+    setBooks(filtered); // Update the displayed books
+  }, [allBooks, currentCategory, currentPriceFilter, currentSort]); // Dependencies
 
   const handleCategoryClick = (category) => setCurrentCategory(category);
   const handlePriceRangeChange = (e) => setCurrentPriceFilter(e.target.value);
@@ -50,7 +86,6 @@ const SearchPage = () => {
     setCurrentSort("relevance");
   };
 
-  // 3. Add loading and error UI
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   if (error) return <div className="min-h-screen flex items-center justify-center text-red-500">{error}</div>;
 
@@ -107,8 +142,8 @@ const SearchPage = () => {
             </div>
           </div>
           
-          {/* 4. Pass fetched books. Filtering not applied yet. */}
-          <BookGrid books={allBooks} />
+          {/* 3. Pass the *filtered* books to the grid */}
+          <BookGrid books={books} />
         </div>
       </div>
       <Footer />
