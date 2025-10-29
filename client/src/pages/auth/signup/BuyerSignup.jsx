@@ -10,9 +10,45 @@ const BuyerSignup = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError("");
+
+    const { firstname, lastname, email, password, confirmPassword } = formData;
+    const trimmedFirstname = firstname.trim();
+    const trimmedLastname = lastname.trim();
+    const trimmedEmail = email.trim();
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!trimmedFirstname || !trimmedLastname) {
+      setError("Please enter your first and last name.");
+      return;
+    }
+    if (!emailPattern.test(trimmedEmail)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    if (password.length < 3) {
+      setError("Password must be at least 3 characters long.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+    if (!termsAccepted) {
+      setError("You must agree to the Terms of Service and Privacy Policy.");
+      return;
+    }
+
+    alert("Form is valid! Ready to submit.");
   };
 
   return (
@@ -33,7 +69,7 @@ const BuyerSignup = () => {
           </p>
         </div>
 
-        <form className="bg-white p-8 rounded-xl shadow-lg space-y-6">
+        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-lg space-y-6">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label htmlFor="firstname" className="block text-sm font-medium text-gray-700">First Name</label>
@@ -142,6 +178,8 @@ const BuyerSignup = () => {
               <a href="#" className="text-purple-600 hover:text-purple-500">Privacy Policy</a>
             </label>
           </div>
+
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
             type="submit"
