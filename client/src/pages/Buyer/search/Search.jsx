@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { searchBooks, addToWishlist, removeFromWishlist } from "../../../services/buyer.services.js";
+import BookGrid from "./components/BookGrid.jsx";
+// 1. Import Redux hooks and actions
+import { useDispatch } from 'react-redux';
+import { addToWishlist as addToWishlistInStore, removeFromWishlist as removeFromWishlistInStore } from '../../../store/slices/wishlistSlice';
+import { useWishlist } from '../../../store/hooks';
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
-import BookGrid from "./components/BookGrid.jsx";
-// 1. Import wishlist services
-import { searchBooks, addToWishlist } from "../../../services/buyer.services.js"; 
 
 const SearchPage = () => {
+  const dispatch = useDispatch();
+  // 2. Get global state from Redux
+  const { items: wishlistItems } = useWishlist(); 
+  
   const [books, setBooks] = useState([]);
   const [allBooks, setAllBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +31,7 @@ const SearchPage = () => {
       setLoading(true);
       setAllBooks([]);
       setBooks([]);
-      const response = await searchBooks(q); 
+      const response = await searchBooks(q);
       if (response.success) {
         setAllBooks(response.data.books || []);
         setError("");
@@ -48,7 +55,7 @@ const SearchPage = () => {
     if (allBooks.length === 0) {
       setBooks([]);
       return;
-    };
+    }
     let filtered = [...allBooks];
     if (currentCategory !== "All Books") {
       filtered = filtered.filter((b) => b.genre?.toLowerCase().includes(currentCategory.toLowerCase()));
@@ -83,24 +90,45 @@ const SearchPage = () => {
     setCurrentSort("relevance");
   };
 
-  // 2. Add basic wishlist handler
+  // 3. This is the FINAL optimistic update logic
   const handleWishlistAdd = async (bookId, e) => {
+    const buttonEl = e?.currentTarget;
+    const iconEl = buttonEl?.querySelector('i');
+    const isAlreadyInWishlist = wishlistItems.some(item => item._id === bookId);
+
+    if (isAlreadyInWishlist) {
+      // Optimistic remove
+      dispatch(removeFromWishlistInStore({ bookId }));
+      if (iconEl) {
+        iconEl.classList.remove('fas', 'text-red-500');
+        iconEl.classList.add('far', 'text-gray-600');
+      }
+      try {
+        const response = await removeFromWishlist(bookId);
+        if (!response.success) {
+          alert(response.message || 'Failed to remove from wishlist');
+        }
+      } catch {
+        alert('Error removing from wishlist');
+      }
+      return;
+    }
+
+    const bookToAdd = books.find(b => b._id === bookId);
+    if (!bookToAdd) return;
+
+    // Optimistic add
+    dispatch(addToWishlistInStore(bookToAdd));
+    if (iconEl) {
+      iconEl.classList.remove('far', 'text-gray-600');
+      iconEl.classList.add('fas', 'text-red-500');
+    }
     try {
       const response = await addToWishlist(bookId);
-      if (response.success) {
-        alert('Added to wishlist!'); // Simple feedback
-        
-        // Optimistic UI update (simple)
-        const buttonEl = e?.currentTarget;
-        const iconEl = buttonEl?.querySelector('i');
-        if (iconEl) {
-          iconEl.classList.remove('far', 'text-gray-600');
-          iconEl.classList.add('fas', 'text-red-500');
-        }
-      } else {
+      if (!response.success) {
         alert(`Failed to add to wishlist: ${response.message}`);
       }
-    } catch (err) {
+    } catch {
       alert('Error adding to wishlist');
     }
   };
@@ -121,9 +149,7 @@ const SearchPage = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex space-x-8 py-4">
               {["All Books", "Fiction", "Non-Fiction", "Mystery", "Science Fiction", "Romance", "Thriller", "Other"].map(category => (
-                <Link key={category} to="#" 
-                  className={`${currentCategory === category ? "text-purple-600 border-b-2 border-purple-600 pb-4 -mb-4" : "text-gray-600 hover:text-purple-600"}`} 
-                  onClick={(e)=>{e.preventDefault(); handleCategoryClick(category);}}>{category}</Link>
+                <Link key={category} to="#" className={`${currentCategory === category ? "text-purple-600 border-b-2 border-purple-600 pb-4 -mb-4" : "text-gray-600 hover:text-purple-600"}`} onClick={(e)=>{e.preventDefault(); handleCategoryClick(category);}}>{category}</Link>
               ))}
             </div>
           </div>
@@ -165,9 +191,8 @@ const SearchPage = () => {
               </button>
             </div>
           </div>
-          
-          {/* 3. Pass the handler as a prop */}
-          <BookGrid books={books} onWishlistAdd={handleWishlistAdd} />
+
+          <BookGrid books={books} onWishlistAdd={handleWishlistAdd}/>
         </div>
       </div>
       <Footer />
@@ -175,4 +200,4 @@ const SearchPage = () => {
   );
 };
 
-export default SearchPage;
+export default SearchPage; 
