@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { signupBuyer } from "../../../../services/buyer.services.js";
 
 const BuyerSignup = () => {
   const [formData, setFormData] = useState({
@@ -11,12 +13,14 @@ const BuyerSignup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -48,7 +52,25 @@ const BuyerSignup = () => {
       return;
     }
 
-    alert("Form is valid! Ready to submit.");
+    setIsLoading(true);
+    try {
+      const response = await signupBuyer({
+        firstname: trimmedFirstname,
+        lastname: trimmedLastname,
+        email: trimmedEmail,
+        password
+      });
+      if (response.success) {
+        navigate("/auth/login");
+      } else {
+        setError(response.message || "An unexpected error occurred.");
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      setError("An error occurred. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -69,7 +91,7 @@ const BuyerSignup = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-lg space-y-6">
+        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-lg space-y-6 animate-fade-in">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label htmlFor="firstname" className="block text-sm font-medium text-gray-700">First Name</label>
@@ -183,9 +205,13 @@ const BuyerSignup = () => {
 
           <button
             type="submit"
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-300 transform hover:-translate-y-0.5"
+            disabled={isLoading}
+            className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white 
+              ${isLoading ? "bg-purple-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700"} 
+              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 
+              transition-all duration-300 transform hover:-translate-y-0.5`}
           >
-            Create Account
+            {isLoading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
       </div>
