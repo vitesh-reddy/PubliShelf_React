@@ -92,14 +92,24 @@ const BuyerProfile = () => {
         return;
       }
     }
-    alert("Profile updated successfully.");
-    setShowEditDialog(false);
-    setFormData({
-      ...formData,
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
+    try {
+      saveBtnRef.current.innerText = "Saving...";
+      saveBtnRef.current.disabled = true;
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      alert("Profile updated successfully.");
+      setShowEditDialog(false);
+      setFormData({
+        ...formData,
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    } catch (err) {
+      setFormErrors({ ...formErrors, generalError: "Something went wrong. Please try again." });
+    } finally {
+      saveBtnRef.current.innerText = "Save Changes";
+      saveBtnRef.current.disabled = false;
+    }
   };
 
   const closeEditDialog = () => {
