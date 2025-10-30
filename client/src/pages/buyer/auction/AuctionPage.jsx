@@ -7,49 +7,66 @@ const AuctionPage = () => {
     endedAuctions: [],
   });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    setTimeout(() => {
-      setAuctions({
-        ongoingAuctions: [
-          {
-            _id: "1",
-            title: "The Great Gatsby",
-            author: "F. Scott Fitzgerald",
-            image: "https://via.placeholder.com/300x400",
-            currentPrice: 850,
-            basePrice: 500,
-            auctionEnd: new Date(Date.now() + 86400000).toISOString(),
-          },
-        ],
-        futureAuctions: [
-          {
-            _id: "2",
-            title: "1984",
-            author: "George Orwell",
-            image: "https://via.placeholder.com/300x400",
-            basePrice: 600,
-            auctionStart: new Date(Date.now() + 172800000).toISOString(),
-          },
-        ],
-        endedAuctions: [
-          {
-            _id: "3",
-            title: "To Kill a Mockingbird",
-            author: "Harper Lee",
-            image: "https://via.placeholder.com/300x400",
-            currentPrice: 1200,
-          },
-        ],
-      });
-      setLoading(false);
-    }, 800);
+    const fetchData = async () => {
+      try {
+        await new Promise(resolve => setTimeout(resolve, 800));
+        setAuctions({
+          ongoingAuctions: [
+            {
+              _id: "1",
+              title: "The Great Gatsby",
+              author: "F. Scott Fitzgerald",
+              image: "https://via.placeholder.com/300x400",
+              currentPrice: 850,
+              basePrice: 500,
+              auctionEnd: new Date(Date.now() + 86400000).toISOString(),
+            },
+          ],
+          futureAuctions: [
+            {
+              _id: "2",
+              title: "1984",
+              author: "George Orwell",
+              image: "https://via.placeholder.com/300x400",
+              basePrice: 600,
+              auctionStart: new Date(Date.now() + 172800000).toISOString(),
+            },
+          ],
+          endedAuctions: [
+            {
+              _id: "3",
+              title: "To Kill a Mockingbird",
+              author: "Harper Lee",
+              image: "https://via.placeholder.com/300x400",
+              currentPrice: 1200,
+            },
+          ],
+        });
+      } catch (err) {
+        setError("Failed to load auctions. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-lg text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-red-500">{error}</div>
       </div>
     );
   }
