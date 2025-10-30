@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-// 1. Import router hooks
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import BookGrid from "./components/BookGrid.jsx";
-import { searchBooks } from "../../../services/buyer.services.js";
+// 1. Import wishlist services
+import { searchBooks, addToWishlist } from "../../../services/buyer.services.js"; 
 
 const SearchPage = () => {
   const [books, setBooks] = useState([]);
@@ -15,7 +15,6 @@ const SearchPage = () => {
   const [currentPriceFilter, setCurrentPriceFilter] = useState("all");
   const [currentSort, setCurrentSort] = useState("relevance");
 
-  // 2. Get search params
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
@@ -25,10 +24,7 @@ const SearchPage = () => {
       setLoading(true);
       setAllBooks([]);
       setBooks([]);
-      
-      // 3. Use the query param 'q' in the API call
       const response = await searchBooks(q); 
-
       if (response.success) {
         setAllBooks(response.data.books || []);
         setError("");
@@ -44,22 +40,37 @@ const SearchPage = () => {
     }
   };
 
-  // 4. Update fetch dependency to 'q'
   useEffect(() => {
     fetchBooks();
-  }, [q]); // Re-fetch if the search query changes
+  }, [q]);
 
-  // Effect 2: Apply filters (no change)
   useEffect(() => {
     if (allBooks.length === 0) {
       setBooks([]);
       return;
     };
-    
     let filtered = [...allBooks];
-
-    // ... (filter/sort logic)
-    
+    if (currentCategory !== "All Books") {
+      filtered = filtered.filter((b) => b.genre?.toLowerCase().includes(currentCategory.toLowerCase()));
+    }
+    switch (currentPriceFilter) {
+      case "under500": filtered = filtered.filter((b) => (b.price || 0) < 500); break;
+      case "500-1000": filtered = filtered.filter((b) => (b.price || 0) >= 500 && (b.price || 0) <= 1000); break;
+      case "1000-2000": filtered = filtered.filter((b) => (b.price || 0) >= 1000 && (b.price || 0) <= 2000); break;
+      case "2000-3000": filtered = filtered.filter((b) => (b.price || 0) >= 2000 && (b.price || 0) <= 3000); break;
+      case "over3000": filtered = filtered.filter((b) => (b.price || 0) > 3000); break;
+      default: break;
+    }
+    switch (currentSort) {
+      case "price-asc": filtered.sort((a,b) => (a.price || 0) - (b.price || 0)); break;
+      case "price-desc": filtered.sort((a,b) => (b.price || 0) - (a.price || 0)); break;
+      case "rating-asc": filtered.sort((a,b) => (a.rating || 0) - (b.rating || 0)); break;
+      case "rating-desc": filtered.sort((a,b) => (b.rating || 0) - (a.rating || 0)); break;
+      case "quantity-asc": filtered.sort((a,b) => (a.quantity || 0) - (b.quantity || 0)); break;
+      case "quantity-desc": filtered.sort((a,b) => (b.quantity || 0) - (a.quantity || 0)); break;
+      case "newest": filtered.sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt)); break;
+      default: break;
+    }
     setBooks(filtered);
   }, [allBooks, currentCategory, currentPriceFilter, currentSort]);
 
@@ -72,8 +83,29 @@ const SearchPage = () => {
     setCurrentSort("relevance");
   };
 
+  // 2. Add basic wishlist handler
+  const handleWishlistAdd = async (bookId, e) => {
+    try {
+      const response = await addToWishlist(bookId);
+      if (response.success) {
+        alert('Added to wishlist!'); // Simple feedback
+        
+        // Optimistic UI update (simple)
+        const buttonEl = e?.currentTarget;
+        const iconEl = buttonEl?.querySelector('i');
+        if (iconEl) {
+          iconEl.classList.remove('far', 'text-gray-600');
+          iconEl.classList.add('fas', 'text-red-500');
+        }
+      } else {
+        alert(`Failed to add to wishlist: ${response.message}`);
+      }
+    } catch (err) {
+      alert('Error adding to wishlist');
+    }
+  };
+
   const handleLogout = () => {
-    // Placeholder
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     navigate("/auth/login");
   };
@@ -134,7 +166,8 @@ const SearchPage = () => {
             </div>
           </div>
           
-          <BookGrid books={books} />
+          {/* 3. Pass the handler as a prop */}
+          <BookGrid books={books} onWishlistAdd={handleWishlistAdd} />
         </div>
       </div>
       <Footer />
