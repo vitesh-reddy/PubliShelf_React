@@ -1,9 +1,16 @@
 // src/pages/buyer/checkout/Checkout.jsx
-import React from "react";
+import React, { useState } from "react";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 const Checkout = () => {
+    const [selectedAddress, setSelectedAddress] = useState("address1");
+
+    const addresses = [
+        { id: "address1", name: "Vitesh Reddy", line: "Mandapeta, East Godavari District, 532459", phone: "+91 98765 43210" },
+        { id: "address2", name: "Balayya Babu", line: "Sri City, Tirupati District, 517425", phone: "+91 80992 69269" }
+    ];
+
     return (
         <div className="flex flex-col min-h-screen checkout-page">
             <Navbar />
@@ -15,22 +22,23 @@ const Checkout = () => {
                     <div className="bg-white rounded-lg shadow-md p-5 mb-5">
                         <h2 className="text-2xl font-bold text-gray-800 mb-4">Shipping Address</h2>
                         <div className="flex flex-col gap-2.5">
-                            <div className="flex items-center gap-2.5 p-2.5 border rounded-lg">
-                                <input type="radio" name="address" id="address1" checked className="ml-2 mr-2.5 accent-purple-600" />
-                                <label htmlFor="address1" className="w-full">
-                                    <strong className="text-gray-800">Vitesh Reddy</strong><br />
-                                    <span className="text-gray-600">Mandapeta, East Godavari District, 532459</span><br />
-                                    <span className="text-gray-600">Phone: +91 98765 43210</span>
-                                </label>
-                            </div>
-                            <div className="flex items-center gap-2.5 p-2.5 border rounded-lg">
-                                <input type="radio" name="address" id="address2" className="ml-2 mr-2.5 accent-purple-600" />
-                                <label htmlFor="address2" className="w-full">
-                                    <strong className="text-gray-800">Balayya Babu</strong><br />
-                                    <span className="text-gray-600">Sri City, Tirupati District, 517425</span><br />
-                                    <span className="text-gray-600">Phone: +91 80992 69269</span>
-                                </label>
-                            </div>
+                            {addresses.map(addr => (
+                                <div key={addr.id} className={`flex items-center gap-2.5 p-2.5 border rounded-lg cursor-pointer ${selectedAddress === addr.id ? 'border-purple-500 bg-purple-50' : 'border-gray-200 bg-white'}`}>
+                                    <input
+                                        type="radio"
+                                        name="address"
+                                        id={addr.id}
+                                        checked={selectedAddress === addr.id}
+                                        onChange={() => setSelectedAddress(addr.id)}
+                                        className="ml-2 mr-2.5 accent-purple-600 cursor-pointer"
+                                    />
+                                    <label htmlFor={addr.id} className="w-full cursor-pointer">
+                                        <strong className="text-gray-800">{addr.name}</strong><br />
+                                        <span className="text-gray-600">{addr.line}</span><br />
+                                        <span className="text-gray-600">Phone: {addr.phone}</span>
+                                    </label>
+                                </div>
+                            ))}
                             <button className="p-2.5 bg-gray-100 border border-dashed border-gray-200 rounded-lg text-center text-purple-600 font-medium hover:bg-gray-200 mt-2">
                                 + Add New Address
                             </button>
