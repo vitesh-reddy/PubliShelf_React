@@ -1,4 +1,4 @@
-// client/src/pages/publisher/profile/Profile.jsx
+
 import React, { useState, useEffect } from "react";
 
 const Profile = () => {
@@ -7,40 +7,56 @@ const Profile = () => {
   const [analytics, setAnalytics] = useState({ totalRevenue: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editForm, setEditForm] = useState({ name: "", email: "", publishingHouse: "" });
 
   useEffect(() => {
     setTimeout(() => {
-      const shouldFail = false;
-      if (shouldFail) {
-        setError("Failed to fetch profile");
-        setLoading(false);
-      } else {
-        setPublisher({
-          firstname: "John",
-          lastname: "Doe",
-          email: "john@example.com",
-          publishingHouse: "Doe Publishing",
-          status: "active",
-          createdAt: "2024-01-15T00:00:00.000Z"
-        });
-        setSoldBooks([
-          {
-            _id: "1",
-            title: "The Great Adventure",
-            author: "Jane Smith",
-            description: "An epic journey across unknown lands.",
-            genre: "Fiction",
-            basePrice: 299,
-            totalQuantity: 150,
-            totalRevenue: 44850,
-            images: ["https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=120"]
-          }
-        ]);
-        setAnalytics({ totalRevenue: 44850 });
-        setLoading(false);
-      }
+      setPublisher({
+        firstname: "John",
+        lastname: "Doe",
+        email: "john@example.com",
+        publishingHouse: "Doe Publishing",
+        status: "active",
+        createdAt: "2024-01-15T00:00:00.000Z"
+      });
+      setSoldBooks([
+        {
+          _id: "1",
+          title: "The Great Adventure",
+          author: "Jane Smith",
+          description: "An epic journey across unknown lands.",
+          genre: "Fiction",
+          basePrice: 299,
+          totalQuantity: 150,
+          totalRevenue: 44850,
+          images: ["https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=120"]
+        }
+      ]);
+      setAnalytics({ totalRevenue: 44850 });
+      setEditForm({
+        name: "John Doe",
+        email: "john@example.com",
+        publishingHouse: "Doe Publishing"
+      });
+      setLoading(false);
     }, 800);
   }, []);
+
+  const openEditProfile = () => {
+    setEditForm({
+      name: `${publisher.firstname} ${publisher.lastname}`,
+      email: publisher.email,
+      publishingHouse: publisher.publishingHouse
+    });
+    setShowEditModal(true);
+  };
+
+  const handleEditProfileSubmit = (e) => {
+    e.preventDefault();
+    alert("Profile updated!");
+    setShowEditModal(false);
+  };
 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   if (error) return <div className="min-h-screen flex items-center justify-center text-red-500">{error}</div>;
@@ -91,7 +107,7 @@ const Profile = () => {
             </div>
           </div>
           <div className="flex gap-4 mt-6">
-            <button className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg hover:brightness-110 hover:-translate-y-1 transition-all font-semibold text-sm uppercase">
+            <button onClick={openEditProfile} className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg hover:brightness-110 hover:-translate-y-1 transition-all font-semibold text-sm uppercase">
               Edit Profile
             </button>
             <button className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 hover:-translate-y-1 transition-all font-semibold text-sm uppercase">
@@ -127,6 +143,59 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-gray-900">Edit Profile</h3>
+              <button onClick={() => setShowEditModal(false)} className="text-gray-600 hover:text-gray-900">
+                <i className="fas fa-times" />
+              </button>
+            </div>
+            <form onSubmit={handleEditProfileSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Name</label>
+                <input
+                  type="text"
+                  value={editForm.name}
+                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                  required
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Email</label>
+                <input
+                  type="email"
+                  value={editForm.email}
+                  onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                  required
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Publishing House</label>
+                <input
+                  type="text"
+                  value={editForm.publishingHouse}
+                  onChange={(e) => setEditForm({ ...editForm, publishingHouse: e.target.value })}
+                  required
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              <div className="flex justify-end space-x-4">
+                <button type="button" onClick={() => setShowEditModal(false)} className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                  Cancel
+                </button>
+                <button type="submit" className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <footer className="bg-gray-800 text-gray-300 py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
