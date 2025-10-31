@@ -1,5 +1,37 @@
 import React, { useState, useEffect } from "react";
 
+const Countdown = ({ target, type }) => {
+  const [timeLeft, setTimeLeft] = useState("");
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = new Date();
+      const targetDate = new Date(target);
+      const diff = targetDate - now;
+      if (diff <= 0) {
+        setTimeLeft(type === "end" ? "Auction Ended" : "Auction Started");
+        return true;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+      return false;
+    };
+
+    if (calculateTimeLeft()) return;
+    const intervalId = setInterval(() => {
+      if (calculateTimeLeft()) {
+        clearInterval(intervalId);
+      }
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, [target, type]);
+
+  return <p className="text-sm font-semibold">{timeLeft}</p>;
+};
+
 const AuctionPage = () => {
   const [auctions, setAuctions] = useState({
     ongoingAuctions: [],
@@ -146,7 +178,7 @@ const AuctionPage = () => {
                         </div>
                         <div>
                           <p className="text-gray-600 text-sm">Ends in</p>
-                          <p className="text-sm font-semibold">1d 0h 0m 0s</p>
+                          <Countdown target={book.auctionEnd} type="end" />
                         </div>
                       </div>
                       <button className="mt-4 mb-1 w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
@@ -178,7 +210,7 @@ const AuctionPage = () => {
                         </div>
                         <div>
                           <p className="text-gray-600 text-sm">Starts in</p>
-                          <p className="text-sm font-semibold">2d 0h 0m 0s</p>
+                          <Countdown target={book.auctionStart} type="start" />
                         </div>
                       </div>
                       <button className="mt-4 mb-1 w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
