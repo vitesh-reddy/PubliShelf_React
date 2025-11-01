@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 
 const Checkout = () => {
     const [selectedAddress, setSelectedAddress] = useState("address1");
+    const [selectedPayment, setSelectedPayment] = useState("cod");
 
     const addresses = [
         { id: "address1", name: "Vitesh Reddy", line: "Mandapeta, East Godavari District, 532459", phone: "+91 98765 43210" },
@@ -39,7 +40,7 @@ const Checkout = () => {
                                     </label>
                                 </div>
                             ))}
-                            <button className="p-2.5 bg-gray-100 border border-dashed border-gray-200 rounded-lg text-center text-purple-600 font-medium hover:bg-gray-200 mt-2">
+                            <button className="p-2.5 bg-gray-100 border border-dashed border-gray-200 rounded-lg text-center text-purple-600 font-medium hover899:bg-gray-200 mt-2">
                                 + Add New Address
                             </button>
                         </div>
@@ -48,21 +49,28 @@ const Checkout = () => {
                     <div className="bg-white rounded-lg shadow-md p-5 mb-5">
                         <h2 className="text-2xl font-bold text-gray-800 mb-4">Payment Method</h2>
                         <div className="flex flex-col gap-2.5">
-                            <div className="flex items-center gap-2.5 p-2.5 border border-gray-200 rounded-lg cursor-pointer">
-                                <div className="flex items-center gap-2">
+                            <div className={`flex items-center gap-2.5 p-2.5 border rounded-lg cursor-pointer ${selectedPayment === 'creditCard' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 bg-white'}`} onClick={() => setSelectedPayment('creditCard')}>
+                                <input type="radio" name="payment" id="creditCard" checked={selectedPayment === 'creditCard'} onChange={() => {}} className="hidden" />
+                                <label htmlFor="creditCard" className="flex items-center gap-2 cursor-pointer w-full">
                                     <img src="https://logos-world.net/wp-content/uploads/2004/09/Visa-Logo-2014.png" alt="Visa" className="h-5" />
                                     <img src="https://logos-world.net/wp-content/uploads/2020/09/Mastercard-Logo.png" alt="MasterCard" className="h-5" />
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/RuPay-Logo.svg/2560px-RuPay-Logo.svg.png" alt="Rupay" className="h-5" />
                                     Credit/Debit Card
-                                </div>
+                                </label>
                             </div>
-                            <div className="flex items-center gap-2.5 p-2.5 border border-gray-200 rounded-lg cursor-pointer">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo-vector.svg/1200px-UPI-Logo-vector.svg.png" alt="UPI" className="h-5" />
-                                UPI
+                            <div className={`flex items-center gap-2.5 p-2.5 border rounded-lg cursor-pointer ${selectedPayment === 'upi' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 bg-white'}`} onClick={() => setSelectedPayment('upi')}>
+                                <input type="radio" name="payment" id="upi" checked={selectedPayment === 'upi'} onChange={() => {}} className="hidden" />
+                                <label htmlFor="upi" className="flex items-center gap-2 cursor-pointer w-full">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo-vector.svg/1200px-UPI-Logo-vector.svg.png" alt="UPI" className="h-5" />
+                                    UPI
+                                </label>
                             </div>
-                            <div className="flex items-center gap-2.5 p-2.5 border border-gray-200 rounded-lg cursor-pointer">
-                                <i className="fas fa-money-bill-wave"></i>
-                                Cash on Delivery
+                            <div className={`flex items-center gap-2.5 p-2.5 border rounded-lg cursor-pointer ${selectedPayment === 'cod' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 bg-white'}`} onClick={() => setSelectedPayment('cod')}>
+                                <input type="radio" name="payment" id="cod" checked={selectedPayment === 'cod'} onChange={() => {}} className="hidden" />
+                                <label htmlFor="cod" className="flex items-center gap-2 cursor-pointer w-full">
+                                    <i className="fas fa-money-bill-wave"></i>
+                                    Cash on Delivery
+                                </label>
                             </div>
                         </div>
                     </div>
