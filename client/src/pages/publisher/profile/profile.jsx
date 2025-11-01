@@ -9,6 +9,9 @@ const Profile = () => {
   const [error, setError] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState({ name: "", email: "", publishingHouse: "" });
+  const [showBookEditModal, setShowBookEditModal] = useState(false);
+  const [editBookForm, setEditBookForm] = useState({});
+  const [selectedBook, setSelectedBook] = useState(null);
 
   useEffect(() => {
     setTimeout(() => {
@@ -56,6 +59,26 @@ const Profile = () => {
     e.preventDefault();
     alert("Profile updated!");
     setShowEditModal(false);
+  };
+
+  const openEditBookModal = (book) => {
+    setSelectedBook(book);
+    setEditBookForm({
+      title: book.title,
+      author: book.author,
+      description: book.description,
+      genre: book.genre,
+      basePrice: book.basePrice,
+      totalQuantity: book.totalQuantity,
+      images: book.images.join(",")
+    });
+    setShowBookEditModal(true);
+  };
+
+  const handleEditBookSubmit = (e) => {
+    e.preventDefault();
+    alert("Book updated!");
+    setShowBookEditModal(false);
   };
 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
@@ -131,7 +154,7 @@ const Profile = () => {
                     <p className="text-gray-600 text-sm"><strong>Revenue:</strong> ₹{book.totalRevenue.toFixed(2)}</p>
                   </div>
                   <div className="flex flex-col gap-3 justify-center">
-                    <button className="bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                    <button onClick={() => openEditBookModal(book)} className="bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors">
                       Edit Book
                     </button>
                   </div>
@@ -186,6 +209,111 @@ const Profile = () => {
               </div>
               <div className="flex justify-end space-x-4">
                 <button type="button" onClick={() => setShowEditModal(false)} className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                  Cancel
+                </button>
+                <button type="submit" className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showBookEditModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-lg">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-gray-900">Edit Book Details</h3>
+              <button onClick={() => setShowBookEditModal(false)} className="text-gray-600 hover:text-gray-900">
+                <i className="fas fa-times" />
+              </button>
+            </div>
+            <form onSubmit={handleEditBookSubmit} className="space-y-4">
+              <input type="hidden" value={selectedBook?._id} />
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Title</label>
+                <input
+                  type="text"
+                  value={editBookForm.title}
+                  onChange={(e) => setEditBookForm({ ...editBookForm, title: e.target.value })}
+                  required
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Author</label>
+                <input
+                  type="text"
+                  value={editBookForm.author}
+                  onChange={(e) => setEditBookForm({ ...editBookForm, author: e.target.value })}
+                  required
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Description</label>
+                <textarea
+                  rows="4"
+                  value={editBookForm.description}
+                  onChange={(e) => setEditBookForm({ ...editBookForm, description: e.target.value })}
+                  required
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Genre</label>
+                <select
+                  value={editBookForm.genre}
+                  onChange={(e) => setEditBookForm({ ...editBookForm, genre: e.target.value })}
+                  required
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                >
+                  <option value="">Select Genre</option>
+                  <option value="Fiction">Fiction</option>
+                  <option value="Non-Fiction">Non-Fiction</option>
+                  <option value="Mystery">Mystery</option>
+                  <option value="Science Fiction">Science Fiction</option>
+                  <option value="Romance">Romance</option>
+                  <option value="Thriller">Thriller</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Base Price (₹)</label>
+                <input
+                  type="number"
+                  value={editBookForm.basePrice}
+                  onChange={(e) => setEditBookForm({ ...editBookForm, basePrice: e.target.value })}
+                  step="1"
+                  min="0"
+                  required
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Quantity</label>
+                <input
+                  type="number"
+                  value={editBookForm.totalQuantity}
+                  onChange={(e) => setEditBookForm({ ...editBookForm, totalQuantity: e.target.value })}
+                  step="1"
+                  min="0"
+                  required
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Image URLs (comma-separated)</label>
+                <input
+                  type="text"
+                  value={editBookForm.images}
+                  onChange={(e) => setEditBookForm({ ...editBookForm, images: e.target.value })}
+                  required
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              <div className="flex justify-end space-x-4">
+                <button type="button" onClick={() => setShowBookEditModal(false)} className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
                   Cancel
                 </button>
                 <button type="submit" className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
