@@ -18,6 +18,36 @@ const PublisherSignup = () => {
             </a>
           </p>
         </div>
+        <form id="signupForm" className="space-y-6">
+          <div className="bg-white p-8 shadow-lg rounded-xl space-y-6 animate-fade-in">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="firstname" className="block text-sm font-medium text-gray-700">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="firstname"
+                  name="firstname"
+                  required
+                  className="mt-1 block w-full py-2 border px-3 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label htmlFor="lastname" className="block text-sm font-medium text-gray-700">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="lastname"
+                  name="lastname"
+                  required
+                  className="mt-1 block w-full px-3 py-2 border-gray-300 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   );
