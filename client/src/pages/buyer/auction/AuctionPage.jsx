@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { getAuctionPage } from "../../../services/antiqueBook.services.js";
 
 const Countdown = ({ target, type }) => {
   const [timeLeft, setTimeLeft] = useState("");
@@ -42,49 +44,22 @@ const AuctionPage = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchAuctions = async () => {
       try {
-        await new Promise(resolve => setTimeout(resolve, 800));
-        setAuctions({
-          ongoingAuctions: [
-            {
-              _id: "1",
-              title: "The Great Gatsby",
-              author: "F. Scott Fitzgerald",
-              image: "https://via.placeholder.com/300x400",
-              currentPrice: 850,
-              basePrice: 500,
-              auctionEnd: new Date(Date.now() + 86400000).toISOString(),
-            },
-          ],
-          futureAuctions: [
-            {
-              _id: "2",
-              title: "1984",
-              author: "George Orwell",
-              image: "https://via.placeholder.com/300x400",
-              basePrice: 600,
-              auctionStart: new Date(Date.now() + 172800000).toISOString(),
-            },
-          ],
-          endedAuctions: [
-            {
-              _id: "3",
-              title: "To Kill a Mockingbird",
-              author: "Harper Lee",
-              image: "https://via.placeholder.com/300x400",
-              currentPrice: 1200,
-            },
-          ],
-        });
+        setLoading(true);
+        const response = await getAuctionPage();
+        if (response.success) {
+          setAuctions(response.data);
+        } else {
+          setError(response.message);
+        }
       } catch (err) {
-        setError("Failed to load auctions. Please try again later.");
+        setError("Failed to fetch auctions");
       } finally {
         setLoading(false);
       }
     };
-
-    fetchData();
+    fetchAuctions();
   }, []);
 
   if (loading) {
@@ -109,18 +84,18 @@ const AuctionPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <a href="/buyer/dashboard" className="flex items-center">
+              <Link to="/buyer/dashboard" className="flex items-center">
                 <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 text-transparent bg-clip-text">PubliShelf</span>
-              </a>
+              </Link>
             </div>
             <div className="flex items-center md:space-x-8 relative">
-              <a href="/buyer/cart/#wishlist-section" className="text-gray-700 hover:text-purple-600 hidden md:block">
+              <Link to="/buyer/cart/#wishlist-section" className="text-gray-700 hover:text-purple-600 hidden md:block">
                 <i className="far fa-heart"></i>
-              </a>
-              <a href="/buyer/cart" className="text-gray-700 hover:text-purple-600 hidden md:block">
+              </Link>
+              <Link to="/buyer/cart" className="text-gray-700 hover:text-purple-600 hidden md:block">
                 <i className="fas fa-shopping-cart"></i>
-              </a>
-              <button className="bg-gradient-to-r hover:bg-gradient-to-l from-purple-600 to-indigo-600 text-white px-4 py-2 rounded-lg hover:-translate-y-[2px] transition-all duration-300 hidden md:block">
+              </Link>
+              <button onClick={() => window.location.href = '/buyer/dashboard'} className="bg-gradient-to-r hover:bg-gradient-to-l from-purple-600 to-indigo-600 text-white px-4 py-2 rounded-lg hover:-translate-y-[2px] transition-all duration-300 hidden md:block">
                 Bookstore
               </button>
               <div className="relative group">
@@ -129,11 +104,11 @@ const AuctionPage = () => {
                   <span className="text-gray-700 hidden md:block">John Doe</span>
                 </button>
                 <div className="absolute top-[22px] right-0 w-48 bg-white shadow-lg rounded-lg py-2 hidden group-hover:block">
-                  <a href="/buyer/profile" className="block px-4 py-2 text-gray-700 hover:bg-purple-50">Your Profile</a>
-                  <a href="/buyer/dashboard" className="block px-4 py-2 text-gray-700 hover:bg-purple-50">Bookstore</a>
-                  <a href="/buyer/cart/#wishlist-section" className="block px-4 py-2 text-gray-700 hover:bg-purple-50">Wishlist Page</a>
-                  <a href="/buyer/cart" className="block px-4 py-2 text-gray-700 hover:bg-purple-50">Cart Page</a>
-                  <a href="/logout" className="block px-4 py-2 text-gray-700 hover:bg-purple-50">Logout</a>
+                  <Link to="/buyer/profile" className="block px-4 py-2 text-gray-700 hover:bg-purple-50">Your Profile</Link>
+                  <Link to="/buyer/dashboard" className="block px-4 py-2 text-gray-700 hover:bg-purple-50">Bookstore</Link>
+                  <Link to="/buyer/cart/#wishlist-section" className="block px-4 py-2 text-gray-700 hover:bg-purple-50">Wishlist Page</Link>
+                  <Link to="/buyer/cart" className="block px-4 py-2 text-gray-700 hover:bg-purple-50">Cart Page</Link>
+                  <Link to="/logout" className="block px-4 py-2 text-gray-700 hover:bg-purple-50">Logout</Link>
                 </div>
               </div>
             </div>
@@ -146,9 +121,9 @@ const AuctionPage = () => {
           <nav className="flex mb-6" aria-label="Breadcrumb">
             <ol className="inline-flex items-center space-x-1 md:space-x-3">
               <li className="inline-flex items-center">
-                <a href="/buyer/dashboard" className="text-gray-700 hover:text-purple-600">
+                <Link to="/buyer/dashboard" className="text-gray-700 hover:text-purple-600">
                   <i className="fas fa-home mr-2"></i> Home
-                </a>
+                </Link>
               </li>
               <li>
                 <div className="flex items-center">
@@ -181,7 +156,7 @@ const AuctionPage = () => {
                           <Countdown target={book.auctionEnd} type="end" />
                         </div>
                       </div>
-                      <button className="mt-4 mb-1 w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                      <button onClick={() => window.location.href = `/buyer/auction-item-detail/${book._id}`} className="mt-4 mb-1 w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
                         View Auction
                       </button>
                     </div>
@@ -213,7 +188,7 @@ const AuctionPage = () => {
                           <Countdown target={book.auctionStart} type="start" />
                         </div>
                       </div>
-                      <button className="mt-4 mb-1 w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                      <button onClick={() => window.location.href = `/buyer/auction-item-detail/${book._id}`} className="mt-4 mb-1 w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
                         View Details
                       </button>
                     </div>
@@ -245,7 +220,7 @@ const AuctionPage = () => {
                           <p className="text-sm font-semibold">{book.currentPrice ? "Sold" : "Not sold"}</p>
                         </div>
                       </div>
-                      <button className="mt-4 mb-1 w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                      <button onClick={() => window.location.href = `/buyer/auction-item-detail/${book._id}`} className="mt-4 mb-1 w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
                         View Details
                       </button>
                     </div>
