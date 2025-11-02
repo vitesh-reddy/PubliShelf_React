@@ -34,6 +34,12 @@ const BuyerProfile = () => {
     newPassword: "",
     confirmPassword: "",
   });
+  const [formErrors, setFormErrors] = useState({
+    emailError: "",
+    currentPasswordError: "",
+    passwordError: "",
+    generalError: "",
+  });
   const saveBtnRef = useRef(null);
 
   useEffect(() => {
@@ -91,15 +97,58 @@ const BuyerProfile = () => {
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormErrors({
+      emailError: "",
+      currentPasswordError: "",
+      passwordError: "",
+      generalError: "",
+    });
   };
 
-  const closeEditDialog = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { email, currentPassword, newPassword, confirmPassword } = formData;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setFormErrors({ ...formErrors, generalError: "Please enter a valid email address." });
+      return;
+    }
+
+    if (newPassword || confirmPassword) {
+      if (!currentPassword) {
+        setFormErrors({ ...formErrors, currentPasswordError: "Current password is required to change password." });
+        return;
+      }
+      if (newPassword !== confirmPassword) {
+        setFormErrors({ ...formErrors, passwordError: "New passwords do not match." });
+        return;
+      }
+    }
+
+    // Mock success
+    setUser({
+      ...user,
+      firstname: formData.firstname.trim(),
+      lastname: formData.lastname.trim(),
+      email: formData.email.trim(),
+    });
     setShowEditDialog(false);
     setFormData({
       ...formData,
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
+    });
+  };
+
+  const closeEditDialog = () => {
+    setShowEditDialog(false);
+    setFormErrors({
+      emailError: "",
+      currentPasswordError: "",
+      passwordError: "",
+      generalError: "",
     });
   };
 
@@ -233,7 +282,7 @@ const BuyerProfile = () => {
           onClick={(e) => e.stopPropagation()}
         >
           <h3 className="text-black mb-[20px] text-[20px] font-semibold">Edit Profile</h3>
-          <form className="w-full flex flex-col justify-center items-center gap-[5px]">
+          <form className="w-full flex flex-col justify-center items-center gap-[5px]" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="firstname" className="block mb-[3px] text-[rgb(55,65,81)] text-[12px]">
                 First Name
@@ -272,6 +321,9 @@ const BuyerProfile = () => {
                 onChange={handleInputChange}
                 className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
               />
+              <p className={`text-[#e63946] text-[12px] mt-[5px] ${formErrors.emailError ? "block" : "hidden"}`} id="emailError">
+                {formErrors.emailError}
+              </p>
             </div>
             <div className="w-full pt-[10px] border-t border-[#f5f5f5] mt-[15px]">
               <h4 className="text-[#6b48ff] mb-[15px] text-[16px]">Change Password</h4>
@@ -287,6 +339,12 @@ const BuyerProfile = () => {
                   onChange={handleInputChange}
                   className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
                 />
+                <p
+                  className={`text-[#e63946] text-[12px] mt-[5px] ${formErrors.currentPasswordError ? "block" : "hidden"}`}
+                  id="currentPasswordError"
+                >
+                  {formErrors.currentPasswordError}
+                </p>
               </div>
               <div>
                 <label htmlFor="newPassword" className="block mb-[3px] text-[rgb(55,65,81)] text-[12px]">
@@ -313,8 +371,17 @@ const BuyerProfile = () => {
                   onChange={handleInputChange}
                   className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
                 />
+                <p className={`text-[#e63946] text-[12px] mt-[5px] ${formErrors.passwordError ? "block" : "hidden"}`} id="passwordError">
+                  {formErrors.passwordError}
+                </p>
               </div>
             </div>
+            <p
+              id="errorMessage"
+              className={`text-[#e63946] text-[14px] mt-[5px] ${formErrors.generalError ? "block" : "hidden"}`}
+            >
+              {formErrors.generalError}
+            </p>
             <div className="flex gap-[10px] mt-[6px]">
               <button
                 type="button"
@@ -324,8 +391,9 @@ const BuyerProfile = () => {
                 Cancel
               </button>
               <button
-                type="button"
-                className="border-none rounded-[8px] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] font-semibold uppercase tracking-[0.5px] p-[12px] text-[14px] bg-[linear-gradient(135deg,#8a4af3,#6b48ff)] text-white"
+                type="submit"
+                className="border-none rounded-[8px] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] font-semibold uppercase tracking-[0.5px] p-[12px] text-[14px] bg-[linear-gradient(135deg,#8a4af3,#6b48ff)] text-white disabled:opacity-70 disabled:cursor-not-allowed"
+                id="saveBtn"
                 ref={saveBtnRef}
               >
                 Save Changes
