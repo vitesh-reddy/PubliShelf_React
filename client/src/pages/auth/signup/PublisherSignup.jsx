@@ -76,6 +76,33 @@ const PublisherSignup = () => {
                 />
               </div>
             </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <div className="mt-1 relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <i className="fas fa-lock text-gray-400"></i>
+                </div>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  className="appearance-none block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  id="togglePassword"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                >
+                  <i
+                    className="fas fa-eye text-gray-400 hover:text-gray-600 cursor-pointer"
+                  ></i>
+                </button>
+              </div>
+            </div>
           </div>
         </form>
       </div>
