@@ -1,4 +1,4 @@
-// No changes in this commit. It's already prop-driven and correct.
+// This file is identical to the previous commit and the final version.
 import React from "react";
 
 const BookCard = ({ book, onClick, showSold = false, isTrending = false, idx }) => {

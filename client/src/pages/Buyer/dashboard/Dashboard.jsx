@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react"; // Import hooks
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getDashboard } from "../../../services/buyer.services.js"; // Import API service
+import { getDashboard } from "../../../services/buyer.services.js";
 import BookCard from "./components/BookCard.jsx";
-// Still using static Navbar/Footer
+import Navbar from "../components/Navbar.jsx"; // 1. Import layout component
+import Footer from "../components/Footer.jsx"; // 1. Import layout component
 
 const Dashboard = () => {
-  // 1. Add state for data, loading, and errors
   const [data, setData] = useState({ newlyBooks: [], mostSoldBooks: [], trendingBooks: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // 2. Add useEffect to fetch data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,23 +28,21 @@ const Dashboard = () => {
       }
     };
     fetchData();
-  }, []); // Empty dependency array = runs once on mount
+  }, []);
 
-  // Loading/Error UI not yet added, will flicker or show empty
-  
+  // 2. Add conditional loading and error states
+  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  if (error) return <div className="min-h-screen flex items-center justify-center text-red-500">{error}</div>;
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Static Navbar HTML (unchanged) */}
-      <nav className="fixed w-full bg-white shadow-sm z-50">
-       {/* ... navbar html ... */}
-      </nav>
+      <Navbar /> {/* 3. Use component, remove static HTML */}
 
       {/* Main Content */}
       <section className="py-12 pt-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-8">Newly Added Books</h2>
           <div className="book-carousel" id="topRatedCarousel">
-            {/* 3. Map over state data */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {data.newlyBooks.map((book) => (
                 <BookCard key={book._id} book={book} onClick={() => navigate(`/buyer/product-detail/${book._id}`)} />
@@ -80,11 +77,8 @@ const Dashboard = () => {
           </div>
         </div>
       </section>
-      
-      {/* Static Footer HTML (unchanged) */}
-      <footer className="bg-white border-t mt-auto p-4 text-center text-gray-600">
-        © 2025 PubliShelf. All rights reserved.
-      </footer>
+
+      <Footer /> {/* 3. Use component, remove static HTML */}
     </div>
   );
 };
