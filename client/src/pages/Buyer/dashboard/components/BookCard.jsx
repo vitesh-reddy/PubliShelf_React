@@ -1,15 +1,12 @@
+// No changes in this commit. It's already prop-driven and correct.
 import React from "react";
 
-// 1. Accept props
 const BookCard = ({ book, onClick, showSold = false, isTrending = false, idx }) => {
   return (
-    // 2. Use onClick prop
     <div onClick={onClick}
      className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-[5px] hover:shadow-lg cursor-pointer">
       <div className="relative w-full h-64 bg-gray-100 flex items-center justify-center">
-        {/* 3. Use book data */}
         <img src={book.image} alt={book.title} className="max-h-full max-w-full object-contain" />
-        {/* 4. Add conditional rendering */}
         {isTrending && (
           <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs">
             #{idx + 1}
@@ -21,7 +18,6 @@ const BookCard = ({ book, onClick, showSold = false, isTrending = false, idx }) 
         <p className="text-gray-600 text-sm mb-2">by {book.author}</p>
         <div className="flex justify-between items-center">
           <div className="flex flex-col">
-            {/* 4. Add conditional rendering */}
             {showSold && (
               <span className="text-purple-600 text-sm">Total Sold: {book.totalSold}</span>
             )}
