@@ -40,6 +40,7 @@ const BuyerProfile = () => {
     passwordError: "",
     generalError: "",
   });
+  const [isSaving, setIsSaving] = useState(false);
   const saveBtnRef = useRef(null);
 
   useEffect(() => {
@@ -105,7 +106,7 @@ const BuyerProfile = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, currentPassword, newPassword, confirmPassword } = formData;
 
@@ -126,20 +127,35 @@ const BuyerProfile = () => {
       }
     }
 
-    // Mock success
-    setUser({
-      ...user,
-      firstname: formData.firstname.trim(),
-      lastname: formData.lastname.trim(),
-      email: formData.email.trim(),
-    });
-    setShowEditDialog(false);
-    setFormData({
-      ...formData,
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
+    try {
+      setIsSaving(true);
+      saveBtnRef.current.innerText = "Saving...";
+      saveBtnRef.current.disabled = true;
+
+      // Simulate API delay
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      setUser({
+        ...user,
+        firstname: formData.firstname.trim(),
+        lastname: formData.lastname.trim(),
+        email: formData.email.trim(),
+      });
+      setShowEditDialog(false);
+      setFormData({
+        ...formData,
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    } catch (err) {
+      setFormErrors({ ...formErrors, generalError: "Something went wrong. Please try again." });
+    } finally {
+      setIsSaving(false);
+      saveBtnRef.current.innerText = "Save Changes";
+      saveBtnRef.current.disabled = false;
+    }
   };
 
   const closeEditDialog = () => {
@@ -395,6 +411,7 @@ const BuyerProfile = () => {
                 className="border-none rounded-[8px] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] font-semibold uppercase tracking-[0.5px] p-[12px] text-[14px] bg-[linear-gradient(135deg,#8a4af3,#6b48ff)] text-white disabled:opacity-70 disabled:cursor-not-allowed"
                 id="saveBtn"
                 ref={saveBtnRef}
+                disabled={isSaving}
               >
                 Save Changes
               </button>
