@@ -132,8 +132,6 @@ const BuyerProfile = () => {
       saveBtnRef.current.innerText = "Saving...";
       saveBtnRef.current.disabled = true;
 
-      // Simulate API delay
-
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       setUser({
@@ -419,7 +417,6 @@ const BuyerProfile = () => {
           </form>
         </div>
       </div>
-
       <Footer />
     </div>
   );
