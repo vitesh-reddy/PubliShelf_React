@@ -16,6 +16,38 @@ const PublisherSignup = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    const { firstname, lastname, publishingHouse, businessEmail, password, confirmPassword } = formData;
+    const trimmedFirstname = firstname.trim();
+    const trimmedLastname = lastname.trim();
+    const trimmedPublishingHouse = publishingHouse.trim();
+    const trimmedEmail = businessEmail.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!trimmedFirstname || !trimmedLastname || !trimmedPublishingHouse || !trimmedEmail || !password || !confirmPassword) {
+      setError("All fields are required.");
+      return;
+    }
+    if (!emailPattern.test(trimmedEmail)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    if (password.length < 3) {
+      setError("Password must be at least 3 characters long.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+    if (!termsAccepted) {
+      setError("You must agree to the Terms and Privacy Policy.");
+      return;
+    }
+    setIsLoading(true);
+    setIsLoading(false);
+  };
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-purple-50 to-white bg-gray-50">
       <div className="max-w-md w-full">
@@ -33,7 +65,7 @@ const PublisherSignup = () => {
             </a>
           </p>
         </div>
-        <form id="signupForm" className="space-y-6">
+        <form id="signupForm" onSubmit={handleSubmit} className="space-y-6">
           <div className="bg-white p-8 shadow-lg rounded-xl space-y-6 animate-fade-in">
             <div className="grid grid-cols-2 gap-4">
               <div>
