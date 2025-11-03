@@ -1,23 +1,45 @@
-// src/pages/buyer/auction/AuctionItemDetail.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 const AuctionItemDetail = () => {
-  const [book] = useState({
-    _id: "1",
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    genre: "Classic Fiction",
-    condition: "Excellent",
-    image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=600",
-    currentPrice: 2500,
-    basePrice: 1500,
-    description: "A classic American novel set in the Jazz Age, exploring themes of wealth, love, and the American Dream.",
-    auctionEnd: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000 + 5 * 60 * 60 * 1000 + 30 * 60 * 1000 + 15 * 1000).toISOString(),
-    auctionStart: new Date(Date.now() - 1000 * 60 * 60).toISOString()
-  });
+  const [book, setBook] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setBook({
+        _id: "1",
+        title: "The Great Gatsby",
+        author: "F. Scott Fitzgerald",
+        genre: "Classic Fiction",
+        condition: "Excellent",
+        image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=600",
+        currentPrice: 2500,
+        basePrice: 1500,
+        description: "A classic American novel set in the Jazz Age, exploring themes of wealth, love, and the American Dream.",
+        auctionEnd: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000 + 5 * 60 * 60 * 1000 + 30 * 60 * 1000 + 15 * 1000).toISOString(),
+        auctionStart: new Date(Date.now() - 1000 * 60 * 60).toISOString()
+      });
+      setLoading(false);
+    }, 500);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="pt-16 pb-20 flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading auction item...</p>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
