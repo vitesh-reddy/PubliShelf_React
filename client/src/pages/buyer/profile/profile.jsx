@@ -2,22 +2,22 @@
 import React, { useState, useEffect, useRef } from "react";
 
 const Navbar = () => (
-  <nav className="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-50">
+  <nav className="bg-white shadow-sm p-4 fixed top-0 left-0 right-0 z-50 border-b border-gray-100">
     <div className="max-w-[1400px] mx-auto flex justify-between items-center">
-      <h1 className="text-[#6b48ff] text-2xl font-bold">PubliShelf</h1>
-      <div className="flex gap-4">
-        <span className="text-[#666]">Home</span>
-        <span className="text-[#666]">Books</span>
-        <span className="text-[#666]">Profile</span>
+      <h1 className="text-[#6b48ff] text-2xl font-bold tracking-tight">PubliShelf</h1>
+      <div className="flex gap-6">
+        <span className="text-[#555] hover:text-[#6b48ff] transition-colors cursor-pointer text-sm font-medium">Home</span>
+        <span className="text-[#555] hover:text-[#6b48ff] transition-colors cursor-pointer text-sm font-medium">Books</span>
+        <span className="text-[#6b48ff] font-semibold text-sm">Profile</span>
       </div>
     </div>
   </nav>
 );
 
 const Footer = () => (
-  <footer className="bg-[#6b48ff] text-white py-8 mt-20">
+  <footer className="bg-gradient-to-r from-[#6b48ff] to-[#8a4af3] text-white py-10 mt-24">
     <div className="max-w-[1400px] mx-auto text-center">
-      <p>© 2025 PubliShelf. All rights reserved.</p>
+      <p className="text-sm opacity-90">© 2025 PubliShelf. All rights reserved.</p>
     </div>
   </footer>
 );
@@ -167,119 +167,133 @@ const BuyerProfile = () => {
   };
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#fafafa] to-[#f0f0ff]">
+        <div className="text-[#6b48ff] text-lg font-medium">Loading your profile...</div>
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#fafafa] text-[#333] font-['Poppins',_sans-serif]">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#fafafa] to-[#f5f3ff] text-[#333] font-['Poppins',_sans-serif]">
       <Navbar />
       <div className="flex-1 mt-20">
-        <div className="max-w-[1400px] mx-auto px-[20px] mb-[20px] grid grid-cols-[350px_1fr] gap-[25px] max-lg:grid-cols-[300px_1fr] max-md:grid-cols-1">
+        <div className="max-w-[1400px] mx-auto px-[20px] py-6 mb-[20px] grid grid-cols-[minmax(320px,360px)_1fr] gap-[30px] max-lg:grid-cols-[300px_1fr] max-md:grid-cols-1">
           {/* Profile Card */}
-          <div className="bg-white rounded-[16px] shadow-[0_4px_15px_rgba(0,0,0,0.1)] p-[30px] sticky top-[20px] border border-[rgba(138,74,243,0.1)]">
-            <div className="text-center pb-[20px]">
-              <div className="w-[140px] h-[140px] bg-[linear-gradient(135deg,#8a4af3,#6b48ff)] rounded-full mb-[15px] mx-auto relative overflow-hidden border-4 border-white shadow-[0_4px_15px_rgba(0,0,0,0.1)]">
-                <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-[60px] font-bold">
+          <div className="bg-white rounded-2xl shadow-lg p-8 sticky top-24 border border-purple-100 backdrop-blur-sm">
+            <div className="text-center pb-6">
+              <div className="w-36 h-36 bg-gradient-to-br from-[#8a4af3] to-[#6b48ff] rounded-full mb-4 mx-auto relative overflow-hidden border-4 border-white shadow-xl">
+                <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-6xl font-bold">
                   {user.firstname[0].toUpperCase()}
                 </span>
               </div>
-              <h2 className="text-3xl font-bold text-[#6b48ff] mb-[10px]">
+              <h2 className="text-3xl font-bold text-[#6b48ff] mb-2">
                 {user.firstname} {user.lastname}
               </h2>
-              <p className="text-[#666] text-[14px]">{getTimeAgo(user.createdAt)}</p>
+              <p className="text-[#777] text-sm">{getTimeAgo(user.createdAt)}</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-[15px] mt-[20px] p-[15px] bg-[#f5f5f5] rounded-[10px]">
-              <div className="text-center p-[10px] bg-white rounded-[8px]">
-                <span className="block text-[#8a4af3] font-semibold text-[18px]">{user.orders.length}</span>
-                Orders
+            <div className="grid grid-cols-2 gap-4 mt-6 p-4 bg-[#f8f6ff] rounded-xl">
+              <div className="text-center p-3 bg-white rounded-lg shadow-sm">
+                <span className="block text-[#8a4af3] font-bold text-xl">{user.orders.length}</span>
+                <span className="text-xs text-[#666]">Orders</span>
               </div>
-              <div className="text-center p-[10px] bg-white rounded-[8px]">
-                <span className="block text-[#8a4af3] font-semibold text-[18px]">{user.wishlist.length}</span>
-                Wishlist
-              </div>
-            </div>
-
-            <div>
-              <div className="grid grid-cols-[130px_1fr] p-[15px] border-b border-[#f5f5f5] bg-white my-[5px] rounded-[8px]">
-                <span className="text-[#6b48ff] font-semibold text-[14px]">First Name:</span>
-                <span className="text-[#444] text-[14px]">{user.firstname}</span>
-              </div>
-              <div className="grid grid-cols-[130px_1fr] p-[15px] border-b border-[#f5f5f5] bg-white my-[5px] rounded-[8px]">
-                <span className="text-[#6b48ff] font-semibold text-[14px]">Last Name:</span>
-                <span className="text-[#444] text-[14px]">{user.lastname}</span>
-              </div>
-              <div className="grid grid-cols-[130px_1fr] p-[15px] border-b border-[#f5f5f5] bg-white my-[5px] rounded-[8px]">
-                <span className="text-[#6b48ff] font-semibold text-[14px]">Email:</span>
-                <span className="text-[#444] text-[14px]">{user.email}</span>
+              <div className="text-center p-3 bg-white rounded-lg shadow-sm">
+                <span className="block text-[#8a4af3] font-bold text-xl">{user.wishlist.length}</span>
+                <span className="text-xs text-[#666]">Wishlist</span>
               </div>
             </div>
 
-            <div className="mt-[25px] flex gap-[15px]">
+            <div className="mt-6 space-y-2">
+              {[
+                { label: "First Name", value: user.firstname },
+                { label: "Last Name", value: user.lastname },
+                { label: "Email", value: user.email },
+              ].map((item, idx) => (
+                <div key={idx} className="grid grid-cols-[130px_1fr] p-3 bg-white rounded-lg border border-[#f0e6ff] text-sm">
+                  <span className="text-[#6b48ff] font-medium">{item.label}:</span>
+                  <span className="text-[#444] truncate">{item.value}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 flex gap-3">
               <button
-                className="flex-1 p-[14px] border-none rounded-[8px] bg-[linear-gradient(135deg,#8a4af3,#6b48ff)] text-white font-semibold text-[14px] uppercase tracking-[0.5px]"
+                className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-[#8a4af3] to-[#6b48ff] text-white font-semibold text-sm uppercase tracking-wider shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
                 onClick={() => setShowEditDialog(true)}
               >
                 Edit Profile
               </button>
-              <button className="flex-1 p-[14px] border-none rounded-[8px] bg-[#eee] text-[#666] font-semibold text-[14px] uppercase tracking-[0.5px]">
+              <button className="flex-1 py-3.5 rounded-xl bg-gray-100 text-gray-600 font-semibold text-sm uppercase tracking-wider hover:bg-gray-200 transition-colors">
                 Logout
               </button>
             </div>
           </div>
 
           {/* Orders and Wishlist */}
-          <div>
-            <div className="p-[20px] bg-white rounded-[16px] shadow-[0_4px_15px_rgba(0,0,0,0.1)]">
-              <h3 className="text-[#6b48ff] mb-[25px] relative pb-[10px] text-[24px] font-semibold">
+          <div className="space-y-8">
+            {/* Orders */}
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-purple-50">
+              <h3 className="text-[#6b48ff] mb-6 relative pb-3 text-2xl font-bold inline-block">
                 Your Orders
-                <span className="absolute bottom-0 left-0 w-[60px] h-[4px] bg-[linear-gradient(135deg,#8a4af3,#6b48ff)] rounded-[2px]"></span>
+                <span className="absolute bottom-0 left-0 w-16 h-1 bg-gradient-to-r from-[#8a4af3] to-[#6b48ff] rounded-full"></span>
               </h3>
               {user.orders.length > 0 ? (
                 user.orders.map(order => (
-                  <div key={order._id} className="flex justify-between bg-white rounded-[12px] shadow-[0_4px_15px_rgba(0,0,0,0.1)] p-[20px] mb-[20px] gap-[25px] border border-[rgba(138,74,243,0.1)]">
-                    <div>
-                      <h4 className="text-[#8a4af3] mb-[12px] text-[18px] font-semibold">{order.book.title}</h4>
-                      <p className="my-[8px] mx-0 text-[14px]"><strong className="text-[#6b48ff]">Author:</strong> {order.book.author}</p>
-                      <p className="my-[8px] mx-0 text-[14px]"><strong className="text-[#6b48ff]">Genre:</strong> {order.book.genre}</p>
-                      <p className="my-[8px] mx-0 text-[14px]"><strong className="text-[#6b48ff]">Price:</strong> ₹{order.book.price}</p>
-                      <p className="my-[8px] mx-0 text-[14px]"><strong className="text-[#6b48ff]">Quantity:</strong> {order.quantity}</p>
-                      <p className="my-[8px] mx-0 text-[14px]"><strong className="text-[#6b48ff]">Order Date:</strong> {new Date(order.orderDate).toLocaleString("en-US", { month: "short", day: "2-digit", year: "numeric" })}</p>
-                      <p className="my-[8px] mx-0 text-[14px]"><strong className="text-[#6b48ff]">Description:</strong> {order.book.description}</p>
-                    </div>
-                    <div className="min-w-[23%]">
-                      <img src={order.book.image} alt={order.book.title} className="w-[175px] h-[250px] object-cover rounded-[8px] shadow-[0_2px_8px_rgba(0,0,0,0.1)]" />
-                      <div className="mt-[10px] text-center">
-                        <span className="block p-[12px] bg-[#f5f5f5] text-[#6b48ff] font-semibold rounded-[6px]">
-                          {order.delivered ? "Delivered" : "Pending"}
-                        </span>
+                  <div key={order._id} className="flex flex-col md:flex-row justify-between bg-gradient-to-r from-[#fcfaff] to-white rounded-xl shadow-md p-6 mb-6 gap-6 border border-purple-100">
+                    <div className="flex-1">
+                      <h4 className="text-[#8a4af3] mb-3 text-lg font-bold">{order.book.title}</h4>
+                      <div className="space-y-1 text-sm text-[#555]">
+                        <p><strong className="text-[#6b48ff]">Author:</strong> {order.book.author}</p>
+                        <p><strong className="text-[#6b48ff]">Genre:</strong> {order.book.genre}</p>
+                        <p><strong className="text-[#6b48ff]">Price:</strong> ₹{order.book.price}</p>
+                        <p><strong className="text-[#6b48ff]">Quantity:</strong> {order.quantity}</p>
+                        <p><strong className="text-[#6b48ff]">Order Date:</strong> {new Date(order.orderDate).toLocaleString("en-US", { month: "short", day: "2-digit", year: "numeric" })}</p>
+                        <p><strong className="text-[#6b48ff]">Description:</strong> {order.book.description}</p>
                       </div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <img
+                        src={order.book.image}
+                        alt={order.book.title}
+                        className="w-44 h-60 object-cover rounded-lg shadow-md"
+                      />
+                      <span className={`mt-3 px-4 py-1.5 rounded-full text-sm font-medium ${order.delivered ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
+                        {order.delivered ? "Delivered" : "Pending"}
+                      </span>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-center text-[#666]">No orders yet.</p>
+                <p className="text-center text-[#777] py-8">No orders yet.</p>
               )}
             </div>
 
-            <div className="bg-white rounded-[16px] shadow-[0_4px_15px_rgba(0,0,0,0.1)] p-[20px] mt-[25px]">
-              <h3 className="text-[#6b48ff] mb-[25px] relative pb-[10px] text-[24px] font-semibold">
+            {/* Wishlist */}
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-purple-50">
+              <h3 className="text-[#6b48ff] mb-6 relative pb-3 text-2xl font-bold inline-block">
                 Your Wishlist
-                <span className="absolute bottom-0 left-0 w-[60px] h-[4px] bg-[linear-gradient(135deg,#8a4af3,#6b48ff)] rounded-[2px]"></span>
+                <span className="absolute bottom-0 left-0 w-16 h-1 bg-gradient-to-r from-[#8a4af3] to-[#6b48ff] rounded-full"></span>
               </h3>
               {user.wishlist.length > 0 ? (
-                <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-[20px] mt-[20px]">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
                   {user.wishlist.map(book => (
-                    <div key={book._id} className="text-center p-[15px] bg-white rounded-[10px]">
-                      <img src={book.image} alt={book.title} className="mx-auto w-[100px] h-[130px] object-cover mb-[10px] rounded-[6px]" />
-                      <h4 className="text-[#8a4af3] text-[14px] mb-[5px]">{book.title}</h4>
-                      <p className="text-[12px] text-[#666]">{book.author}</p>
-                      <p className="text-[12px] text-[#6b48ff] font-semibold">₹{book.price}</p>
+                    <div key={book._id} className="group text-center p还原-4 bg-gradient-to-b from-white to-[#f9f7ff] rounded-xl shadow hover:shadow-lg transition-all duration-300 border border-purple-50">
+                      <div className="mb-3 overflow-hidden rounded-lg">
+                        <img
+                          src={book.image}
+                          alt={book.title}
+                          className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      <h4 className="text-[#8a4af3] text-sm font-semibold line-clamp-1">{book.title}</h4>
+                      <p className="text-xs text-[#666] mt-1">{book.author}</p>
+                      <p className="text-[#6b48ff] font-bold text-sm mt-2">₹{book.price}</p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-center text-[#666]">Your wishlist is empty.</p>
+                <p className="text-center text-[#777] py-8">Your wishlist is empty.</p>
               )}
             </div>
           </div>
@@ -288,128 +302,105 @@ const BuyerProfile = () => {
 
       {/* Edit Profile Dialog */}
       <div
-        className={`fixed inset-0 bg-[rgba(0,0,0,0.5)] flex items-center justify-center z-[100] transition-opacity duration-300 ${showEditDialog ? "opacity-100 visible" : "opacity-0 invisible"}`}
+        className={`fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[100] transition-opacity duration-300 ${showEditDialog ? "opacity-100 visible" : "opacity-0 invisible"}`}
         onClick={closeEditDialog}
       >
         <div
-          className={`bg-white rounded-[12px] p-[30px] w-full max-w-[500px] shadow-[0_4px_15px_rgba(0,0,0,0.1)] transition-transform duration-300 ${showEditDialog ? "scale-100" : "scale-90"}`}
+          className={`bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl transition-transform duration-300 ${showEditDialog ? "scale-100" : "scale-90"}`}
           onClick={(e) => e.stopPropagation()}
         >
-          <h3 className="text-black mb-[20px] text-[20px] font-semibold">Edit Profile</h3>
-          <form className="w-full flex flex-col justify-center items-center gap-[5px]" onSubmit={handleSubmit}>
+          <h3 className="text-2xl font-bold text-[#6b48ff] mb-6 text-center">Edit Profile</h3>
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="firstname" className="block mb-[3px] text-[rgb(55,65,81)] text-[12px]">
-                First Name
-              </label>
+              <label className="block text-xs font-medium text-gray-600 mb-1">First Name</label>
               <input
                 type="text"
-                id="firstname"
                 name="firstname"
                 value={formData.firstname}
                 onChange={handleInputChange}
-                className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
+                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8a4af3] focus:border-transparent transition-all"
               />
             </div>
             <div>
-              <label htmlFor="lastname" className="block mb-[3px] text-[rgb(55,65,81)] text-[12px]">
-                Last Name
-              </label>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Last Name</label>
               <input
                 type="text"
-                id="lastname"
                 name="lastname"
                 value={formData.lastname}
                 onChange={handleInputChange}
-                className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
+                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8a4af3] focus:border-transparent transition-all"
               />
             </div>
             <div>
-              <label htmlFor="email" className="block mb-[3px] text-[rgb(55,65,81)] text-[12px]">
-                Email
-              </label>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Email</label>
               <input
-                type="text"
-                id="email"
+                type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
+                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8a4af3] focus:border-transparent transition-all"
               />
-              <p className={`text-[#e63946] text-[12px] mt-[5px] ${formErrors.emailError ? "block" : "hidden"}`} id="emailError">
-                {formErrors.emailError}
-              </p>
             </div>
-            <div className="w-full pt-[10px] border-t border-[#f5f5f5] mt-[15px]">
-              <h4 className="text-[#6b48ff] mb-[15px] text-[16px]">Change Password</h4>
-              <div>
-                <label htmlFor="currentPassword" className="block mb-[3px] text-[rgb(55,65,81)] text-[12px]">
-                  Current Password
-                </label>
-                <input
-                  type="password"
-                  id="currentPassword"
-                  name="currentPassword"
-                  value={formData.currentPassword}
-                  onChange={handleInputChange}
-                  className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
-                />
-                <p
-                  className={`text-[#e63946] text-[12px] mt-[5px] ${formErrors.currentPasswordError ? "block" : "hidden"}`}
-                  id="currentPasswordError"
-                >
-                  {formErrors.currentPasswordError}
-                </p>
-              </div>
-              <div>
-                <label htmlFor="newPassword" className="block mb-[3px] text-[rgb(55,65,81)] text-[12px]">
-                  New Password
-                </label>
-                <input
-                  type="password"
-                  id="newPassword"
-                  name="newPassword"
-                  value={formData.newPassword}
-                  onChange={handleInputChange}
-                  className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
-                />
-              </div>
-              <div>
-                <label htmlFor="confirmPassword" className="block mb-[3px] text-[rgb(55,65,81)] text-[12px]">
-                  Confirm New Password
-                </label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  className="w-[440px] px-[12px] py-[10px] border border-[#f5f5f5] rounded-[6px] text-[14px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-[#8a4af3] focus:shadow-[0_0_0_3px_rgba(138,74,243,0.1)]"
-                />
-                <p className={`text-[#e63946] text-[12px] mt-[5px] ${formErrors.passwordError ? "block" : "hidden"}`} id="passwordError">
-                  {formErrors.passwordError}
-                </p>
+
+            <div className="pt-4 border-t border-gray-100">
+              <h4 className="text-[#6b48ff] font-semibold mb-4">Change Password</h4>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Current Password</label>
+                  <input
+                    type="password"
+                    name="currentPassword"
+                    value={formData.currentPassword}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8a4af3] focus:border-transparent transition-all"
+                  />
+                  <p className={`text-red-500 text-xs mt-1 ${formErrors.currentPasswordError ? "block" : "hidden"}`}>
+                    {formErrors.currentPasswordError}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">New Password</label>
+                  <input
+                    type="password"
+                    name="newPassword"
+                    value={formData.newPassword}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8a4af3] focus:border-transparent transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Confirm New Password</label>
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8a4af3] focus:border-transparent transition-all"
+                  />
+                  <p className={`text-red-500 text-xs mt-1 ${formErrors.passwordError ? "block" : "hidden"}`}>
+                    {formErrors.passwordError}
+                  </p>
+                </div>
               </div>
             </div>
-            <p
-              id="errorMessage"
-              className={`text-[#e63946] text-[14px] mt-[5px] ${formErrors.generalError ? "block" : "hidden"}`}
-            >
+
+            <p className={`text-red-500 text-sm text-center ${formErrors.generalError ? "block" : "hidden"}`}>
               {formErrors.generalError}
             </p>
-            <div className="flex gap-[10px] mt-[6px]">
+
+            <div className="flex gap-3 mt-6">
               <button
                 type="button"
-                className="flex-1 border-none rounded-[8px] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] font-semibold uppercase tracking-[0.5px] p-[12px] text-[14px] bg-[#eee] text-[#666]"
                 onClick={closeEditDialog}
+                className="flex-1 py-3 rounded-xl bg-gray-100 text-gray-700 font-semibold text-sm uppercase tracking-wider hover:bg-gray-200 transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="border-none rounded-[8px] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] font-semibold uppercase tracking-[0.5px] p-[12px] text-[14px] bg-[linear-gradient(135deg,#8a4af3,#6b48ff)] text-white disabled:opacity-70 disabled:cursor-not-allowed"
-                id="saveBtn"
                 ref={saveBtnRef}
                 disabled={isSaving}
+                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#8a4af3] to-[#6b48ff] text-white font-semibold text-sm uppercase tracking-wider shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 Save Changes
               </button>
@@ -417,6 +408,7 @@ const BuyerProfile = () => {
           </form>
         </div>
       </div>
+
       <Footer />
     </div>
   );
