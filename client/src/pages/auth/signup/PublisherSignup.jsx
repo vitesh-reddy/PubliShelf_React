@@ -9,6 +9,10 @@ const PublisherSignup = () => {
     password: "",
     confirmPassword: ""
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -106,7 +110,7 @@ const PublisherSignup = () => {
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   required
                   value={formData.password}
                   onChange={handleChange}
@@ -116,10 +120,11 @@ const PublisherSignup = () => {
                 <button
                   type="button"
                   id="togglePassword"
+                  onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 >
                   <i
-                    className="fas fa-eye text-gray-400 hover:text-gray-600 cursor-pointer"
+                    className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"} text-gray-400 hover:text-gray-600 cursor-pointer`}
                   ></i>
                 </button>
               </div>
@@ -150,6 +155,8 @@ const PublisherSignup = () => {
                 name="terms"
                 type="checkbox"
                 required
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
                 className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded cursor-pointer"
               />
               <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
@@ -163,12 +170,20 @@ const PublisherSignup = () => {
                 </a>
               </label>
             </div>
-            <p id="errorMessage" className="text-red-500 text-sm"></p>
+            {error && (
+              <p id="errorMessage" className="text-red-500 text-sm">
+                {error}
+              </p>
+            )}
             <button
               type="submit"
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-300 transform hover:-translate-y-0.5"
+              className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white
+                ${isLoading ? "bg-purple-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700"}
+                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
+                transition-all duration-300 transform hover:-translate-y-0.5`}
+              disabled={isLoading}
             >
-              Create Publisher Account
+              {isLoading ? "Creating Account..." : "Create Publisher Account"}
             </button>
           </div>
         </form>
