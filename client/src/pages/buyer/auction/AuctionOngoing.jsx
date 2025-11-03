@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const AuctionOngoing = () => {
@@ -26,6 +26,30 @@ const AuctionOngoing = () => {
   const authImages = Array.isArray(book.authenticationImage) ? book.authenticationImage : [book.authenticationImage];
   const sortedBids = [...book.biddingHistory].sort((a, b) => new Date(b.bidTime) - new Date(a.bidTime));
   const getTimeAgo = (date) => "Just now";
+
+  const [bidAmount, setBidAmount] = useState("");
+  const [showBidModal, setShowBidModal] = useState(false);
+  const [modalBidAmount, setModalBidAmount] = useState(0);
+  const [formError, setFormError] = useState("");
+
+  const handlePlaceBid = () => {
+    const current = book.currentPrice || book.basePrice;
+    const minBid = current + 100;
+    const bid = parseInt(bidAmount);
+    if (isNaN(bid) || bid < minBid) {
+      setFormError(`Bid must be at least ₹${minBid} (minimum ₹100 increment)`);
+      return;
+    }
+    setFormError("");
+    setModalBidAmount(bid);
+    setShowBidModal(true);
+  };
+
+  const confirmBid = () => {
+    alert(`Bid of ₹${modalBidAmount} placed!`);
+    setShowBidModal(false);
+    setBidAmount("");
+  };
 
   return (
     <div className="bg-gray-50">
@@ -118,13 +142,25 @@ const AuctionOngoing = () => {
                 <div className="space-y-3 flex items-end gap-1">
                   <div className="relative w-full">
                     <label htmlFor="bid-amount" className="text-gray-600 text-sm">Your Bid(₹)</label>
-                    <input type="number" id="bid-amount" min={book.currentPrice + 100} placeholder={`Enter bid (min ₹${book.currentPrice + 100})`} className="text-lg w-full px-3 py-3 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-purple-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                    <input
+                      type="number"
+                      id="bid-amount"
+                      value={bidAmount}
+                      onChange={(e) => setBidAmount(e.target.value)}
+                      min={book.currentPrice + 100}
+                      placeholder={`Enter bid (min ₹${book.currentPrice + 100})`}
+                      className="text-lg w-full px-3 py-3 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-purple-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
                     <span className="absolute right-2 top-9 text-gray-400 cursor-pointer" title={`Bid must be at least ₹${book.currentPrice + 100}`}><i className="fas fa-info-circle text-xs"></i></span>
                   </div>
-                  <button id="enter-bid" className="w-full bg-purple-600 text-white px-4 h-[45px] rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center space-x-2 text-sm">
+                  <button
+                    id="enter-bid"
+                    onClick={handlePlaceBid}
+                    className="w-full bg-purple-600 text-white px-4 h-[45px] rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center space-x-2 text-sm"
+                  >
                     <i className="fas fa-gavel"></i><span>Place Bid</span>
                   </button>
-                  <p id="error-message" className="text-red-600 text-xs hidden">Bid must be at least ₹{(book.currentPrice + 100)}(minimum ₹100 increment)</p>
+                  {formError && <p className="text-red-600 text-xs">{formError}</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -174,6 +210,19 @@ const AuctionOngoing = () => {
               </div>
             </div>
           </div>
+
+          {showBidModal && (
+            <div id="bid-modal" className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg p-5 w-full max-w-sm transform transition-all duration-200">
+                <h3 className="text-lg font-bold text-gray-900">Confirm Bid</h3>
+                <p className="text-gray-600 text-sm mt-2">Place a bid of <span className="font-bold text-purple-600">₹{modalBidAmount.toLocaleString("en-IN")}</span> for {book.title}?</p>
+                <div className="mt-4 flex justify-end space-x-2">
+                  <button id="modal-cancel" onClick={() => setShowBidModal(false)} className="px-3 py-1.5 text-gray-600 border rounded-md hover:bg-gray-100 text-sm">Cancel</button>
+                  <button id="modal-confirm" onClick={confirmBid} className="px-3 py-1.5 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm">Confirm</button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
