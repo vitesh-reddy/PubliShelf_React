@@ -51,6 +51,7 @@ const BuyerSignup = () => {
       setError("You must agree to the Terms of Service and Privacy Policy.");
       return;
     }
+    
 
     setIsLoading(true);
     try {
