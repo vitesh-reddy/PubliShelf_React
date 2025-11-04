@@ -52,7 +52,6 @@ const BuyerSignup = () => {
       return;
     }
     
-
     setIsLoading(true);
     try {
       const response = await signupBuyer({
