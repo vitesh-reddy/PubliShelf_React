@@ -6,8 +6,8 @@ import BookGrid from "./components/BookGrid.jsx";
 import { useDispatch } from 'react-redux';
 import { addToWishlist as addToWishlistInStore, removeFromWishlist as removeFromWishlistInStore } from '../../../store/slices/wishlistSlice';
 import { useWishlist } from '../../../store/hooks';
-import Navbar from "../components/Navbar.jsx";
-import Footer from "../components/Footer.jsx";
+import Navbar from "../components/Navbar.js";
+import Footer from "../components/Footer.js";
 
 const SearchPage = () => {
   const dispatch = useDispatch();
