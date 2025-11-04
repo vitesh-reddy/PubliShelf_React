@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
+import { signupPublisher } from "../../../../services/publisher.services.js";
 const PublisherSignup = () => {
   const [formData, setFormData] = useState({
     firstname: "",
@@ -13,6 +14,7 @@ const PublisherSignup = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -46,7 +48,25 @@ const PublisherSignup = () => {
       return;
     }
     setIsLoading(true);
-    setIsLoading(false);
+    try {
+      const response = await signupPublisher({
+        firstname: trimmedFirstname,
+        lastname: trimmedLastname,
+        publishingHouse: trimmedPublishingHouse,
+        email: trimmedEmail,
+        password
+      });
+      if (response.success) {
+        window.location.href = "/auth/login";
+      } else {
+        setError(response.message || "An unexpected error occurred.");
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      setError("An error occurred. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-purple-50 to-white bg-gray-50">
@@ -223,5 +243,4 @@ const PublisherSignup = () => {
     </div>
   );
 };
-
 export default PublisherSignup;
