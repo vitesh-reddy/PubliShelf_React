@@ -1,56 +1,69 @@
-import { verifyToken } from "../utils/jwt.js";
-import { loginUser } from "../services/authService.js";
+// src/pages/Login.jsx
+import React, { useState } from "react";
 
-export const loginGetController = (req, res) => {
-  const token = req.cookies.token;
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  if (token) {
-    try {
-      const decoded = verifyToken(token);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Login attempt:", { email, password });
+  };
 
-      if (decoded.role === "buyer") return res.redirect("/buyer/dashboard");
-      else if (decoded.role === "publisher")
-        return res.redirect("/publisher/dashboard");
-      else if (decoded.role === "admin")
-        return res.redirect("/admin/dashboard");
-      else return res.redirect("/manager/dashboard");
-    } catch (error) {
-      res.clearCookie("token");
-      return res.render("auth/login");
-    }
-  } else {
-    return res.render("auth/login");
-  }
-};
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Sign in to your account
+          </h2>
+        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="rounded-md shadow-sm -space-y-px">
+            <div>
+              <label htmlFor="email" className="sr-only">
+                Email address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Email address"
+              />
+            </div>
+            <div>
+              <label htmlFor="password" className="sr-only">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Password"
+              />
+            </div>
+          </div>
 
-export const loginPostController = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const { token, user, code } = await loginUser(email, password);
-
-    if (code === 403) 
-      return res.status(403).json({ message: "User not found" });
-    else if (code === 401)    
-      return res.status(401).json({ message: "Invalid password" });
-    if (!token) return res.status(401).json({ message: "Invalid credentials" });
-
-    res.cookie("token", token, {
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === "production", 
-      sameSite: "lax",      
-      path: "/",             
-      maxAge: 24 * 60 * 60 * 1000, 
-    });
-
-    return res.status(200).json({
-      ok: true,
-      message: "Login successful",
-      token,
-      user,
-    });
-  } catch (error) {
-    console.error("Login error:", error);
-    return res.status(500).json({ message: "Error logging in", error });
-  }
-};
+          <div>
+            <button
+              type="submit"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Sign in
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
