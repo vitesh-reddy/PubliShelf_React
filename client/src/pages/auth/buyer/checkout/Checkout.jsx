@@ -5,11 +5,29 @@ const Checkout = () => {
   const [selectedAddress, setSelectedAddress] = useState("address1");
   const [selectedPayment, setSelectedPayment] = useState("cod");
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
+  const [showCardForm, setShowCardForm] = useState(false);
+  const [showUpiForm, setShowUpiForm] = useState(false);
 
   const addresses = [
     { id: "address1", name: "Vitesh Reddy", line: "Mandapeta, East Godavari District, 532459", phone: "+91 98765 43210" },
     { id: "address2", name: "Balayya Babu", line: "Sri City, Tirupati District, 517425", phone: "+91 80992 69269" }
   ];
+
+  const togglePaymentForm = (type) => {
+    if (type === "card") {
+      setSelectedPayment("creditCard");
+      setShowCardForm(!showCardForm);
+      setShowUpiForm(false);
+    } else if (type === "upi") {
+      setSelectedPayment("upi");
+      setShowUpiForm(!showUpiForm);
+      setShowCardForm(false);
+    } else {
+      setSelectedPayment("cod");
+      setShowCardForm(false);
+      setShowUpiForm(false);
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen checkout-page">
@@ -92,7 +110,7 @@ const Checkout = () => {
           <div className="bg-white rounded-lg shadow-md p-5 mb-5">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Payment Method</h2>
             <div className="flex flex-col gap-2.5">
-              <div className={`flex items-center gap-2.5 p-2.5 border rounded-lg cursor-pointer ${selectedPayment === 'creditCard' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 bg-white'}`} onClick={() => setSelectedPayment("creditCard")}>
+              <div className={`flex items-center gap-2.5 p-2.5 border rounded-lg cursor-pointer ${selectedPayment === 'creditCard' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 bg-white'}`} onClick={() => togglePaymentForm("card")}>
                 <input type="radio" name="payment" id="creditCard" checked={selectedPayment === 'creditCard'} onChange={() => {}} className="hidden" />
                 <label htmlFor="creditCard" className="flex items-center gap-2 cursor-pointer w-full">
                   <img src="https://logos-world.net/wp-content/uploads/2004/09/Visa-Logo-2014.png" alt="Visa" className="h-5" />
@@ -101,14 +119,52 @@ const Checkout = () => {
                   Credit/Debit Card
                 </label>
               </div>
-              <div className={`flex items-center gap-2.5 p-2.5 border rounded-lg cursor-pointer ${selectedPayment === 'upi' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 bg-white'}`} onClick={() => setSelectedPayment("upi")}>
+              {showCardForm && (
+                <div className="mt-5 bg-white rounded-lg shadow-md p-5">
+                  <h3 className="text-xl font-bold text-gray-800 mb-4">Enter Card Details</h3>
+                  <form>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Card Number</label>
+                      <input type="text" className="w-full p-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 bg-white" required />
+                    </div>
+                    <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Expiration Date</label>
+                        <input type="text" placeholder="MM/YY" className="w-full p-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 bg-white" required />
+                      </div>
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">CVV</label>
+                        <input type="text" className="w-full p-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 bg-white" required />
+                      </div>
+                    </div>
+                    <div className="flex justify-end mt-4">
+                      <button type="submit" className="w-full p-3 bg-purple-600 text-white rounded-lg text-base font-medium">Save Card</button>
+                    </div>
+                  </form>
+                </div>
+              )}
+              <div className={`flex items-center gap-2.5 p-2.5 border rounded-lg cursor-pointer ${selectedPayment === 'upi' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 bg-white'}`} onClick={() => togglePaymentForm("upi")}>
                 <input type="radio" name="payment" id="upi" checked={selectedPayment === 'upi'} onChange={() => {}} className="hidden" />
                 <label htmlFor="upi" className="flex items-center gap-2 cursor-pointer w-full">
                   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo-vector.svg/1200px-UPI-Logo-vector.svg.png" alt="UPI" className="h-5" />
                   UPI
                 </label>
               </div>
-              <div className={`flex items-center gap-2.5 p-2.5 border rounded-lg cursor-pointer ${selectedPayment === 'cod' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 bg-white'}`} onClick={() => setSelectedPayment("cod")}>
+              {showUpiForm && (
+                <div className="mt-5 bg-white rounded-lg shadow-md p-5">
+                  <h3 className="text-xl font-bold text-gray-800 mb-4">Enter UPI ID</h3>
+                  <form>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">UPI ID</label>
+                      <input type="text" className="w-full p-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 bg-white" required />
+                    </div>
+                    <div className="flex justify-end mt-4">
+                      <button type="submit" className="w-full p-3 bg-purple-600 text-white rounded-lg text-base font-medium">Save UPI</button>
+                    </div>
+                  </form>
+                </div>
+              )}
+              <div className={`flex items-center gap-2.5 p-2.5 border rounded-lg cursor-pointer ${selectedPayment === 'cod' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 bg-white'}`} onClick={() => togglePaymentForm("cod")}>
                 <input type="radio" name="payment" id="cod" checked={selectedPayment === 'cod'} onChange={() => {}} className="hidden" />
                 <label htmlFor="cod" className="flex items-center gap-2 cursor-pointer w-full">
                   <i className="fas fa-money-bill-wave"></i>
