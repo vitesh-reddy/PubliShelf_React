@@ -4,6 +4,7 @@ import React, { useState } from "react";
 const Checkout = () => {
   const [selectedAddress, setSelectedAddress] = useState("address1");
   const [selectedPayment, setSelectedPayment] = useState("cod");
+  const [showNewAddressForm, setShowNewAddressForm] = useState(false);
 
   const addresses = [
     { id: "address1", name: "Vitesh Reddy", line: "Mandapeta, East Godavari District, 532459", phone: "+91 98765 43210" },
@@ -44,10 +45,49 @@ const Checkout = () => {
                   </label>
                 </div>
               ))}
-              <button className="p-2.5 bg-gray-100 border border-dashed border-gray-200 rounded-lg text-center text-purple-600 font-medium hover:bg-gray-200 mt-2">
+              <button onClick={() => setShowNewAddressForm(!showNewAddressForm)} className="p-2.5 bg-gray-100 border border-dashed border-gray-200 rounded-lg text-center text-purple-600 font-medium hover:bg-gray-200 mt-2">
                 + Add New Address
               </button>
             </div>
+            {showNewAddressForm && (
+              <div className="mt-5 bg-white rounded-lg shadow-md p-5">
+                <h3 className="text-xl font-bold text-gray-800 mb-4">Add New Address</h3>
+                <form>
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-5">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                      <input type="text" className="w-full p-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 bg-white" required />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                      <input type="tel" className="w-full p-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 bg-white" required />
+                    </div>
+                  </div>
+                  <div className="mt-5">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                    <textarea rows="3" className="w-full p-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 bg-white" required></textarea>
+                  </div>
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-5 mt-5">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
+                      <input type="text" className="w-full p-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 bg-white" required />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">State</label>
+                      <input type="text" className="w-full p-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 bg-white" required />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
+                      <input type="text" className="w-full p-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 bg-white" required />
+                    </div>
+                  </div>
+                  <div className="flex justify-end gap-2.5 mt-4">
+                    <button type="button" onClick={() => setShowNewAddressForm(false)} className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg">Cancel</button>
+                    <button type="submit" className="px-4 py-2 bg-purple-600 text-white rounded-lg">Save Address</button>
+                  </div>
+                </form>
+              </div>
+            )}
           </div>
           <div className="bg-white rounded-lg shadow-md p-5 mb-5">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Payment Method</h2>
