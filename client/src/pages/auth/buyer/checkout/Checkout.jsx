@@ -1,6 +1,7 @@
 // src/pages/buyer/checkout/Checkout.jsx
 import React, { useState } from "react";
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const Checkout = () => {
   const [selectedAddress, setSelectedAddress] = useState("address1");
@@ -190,6 +191,7 @@ const Checkout = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
