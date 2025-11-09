@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signupBuyer } from "../../../../../services/buyerService.js";
+import { signupBuyer } from "../../../../../../services/buyerService.js";
 
 const BuyerSignup = () => {
   const [formData, setFormData] = useState({
