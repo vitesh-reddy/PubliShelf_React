@@ -15,8 +15,6 @@ import { getMetrics, getTopSoldBooks, getTrendingBooks } from "./services/buyerS
 import morgan from "morgan";
 import Visitor from "./models/Visitor.js";
 
-console.clear();
-
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
